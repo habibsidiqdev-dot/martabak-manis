@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
+  m_Name: Placeholder
+  m_EditorClassIdentifier: 
+  npcName: Penjaga
+  maxTurns: 5
+  targetResonance: 10
+  clueChance: 1
+  moodPool:
+  - mood: 0
+    min: 3
+    max: 3
+  - mood: 1
+    min: 1
+    max: 2
+  - mood: 2
+    min: 0
+    max: 0
+  - mood: 3
+    min: -2
+    max: -2
+  requiredItems:
+  - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
+  lockedDialogue: Tanpa surat jalan, kau tidak lewat.
+  rewardItems:
+  - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
+  introDescription: Gerbang batu tua berdiri di belakang penjaga. Ia memeriksa jalan
+    dan sesekali melirikmu, tetap waspada namun tidak tergesa-gesa.
+  introDialogue: Berhenti dulu. Gerbang ini hanya kubuka untuk orang yang bisa kupercaya.
+    Tunjukkan niatmu.
+  winDialogue: Baik. Aku percaya padamu. Silakan lewat, dan jaga dirimu di perjalanan.
+  loseDialogue: Belum. Sikapmu belum meyakinkanku. Coba lagi kalau sudah siap.
+  noClueText: Penjaga menahan ekspresinya; belum ada petunjuk yang jelas.
+  hints:
+  - approach: 0
+    likeLines:
+    - Penjaga mengangguk kecil saat kamu memperhatikan keadaan sekitar.
+    rejectLines:
+    - Penjaga tampak risih ketika kamu mengamatinya terlalu dekat.
+  - approach: 1
+    likeLines:
+    - Saat kamu menyebut jalur patroli, penjaga tampak tertarik.
+    rejectLines:
+    - Penjaga mengerutkan dahi, seolah penjelasanmu tidak meyakinkan.
+  - approach: 2
+    likeLines:
+    - Penjaga tampak menghargai bantuan nyata yang kamu tawarkan.
+    rejectLines:
+    - Penjaga mundur saat kamu bergerak tanpa meminta izin.
+  - approach: 3
+    likeLines:
+    - Penjaga sedikit rileks ketika kamu memberinya waktu untuk berpikir.
+    rejectLines:
+    - Penjaga mengetuk gagang tombaknya, tak sabar dengan diammu.
+  approachReactions:
+  - approach: 0
+    veryLikeLines:
+    - Penjaga tersenyum tipis. 'Matamu cukup jeli. Tidak banyak yang memperhatikan
+      hal seperti itu.
+    - Penjaga mengangguk kagum. 'Kau memperhatikan detail yang bahkan kulewatkan.
+    likeLines:
+    - Penjaga mengangguk kecil. 'Pengamatan yang bagus. Kau cukup teliti rupanya.
+    - Penjaga tampak sedikit terkesan. 'Tidak buruk. Kau tahu cara memperhatikan
+      sekitar.
+    neutralLines:
+    - Penjaga memperhatikanmu sejenak. 'Begitu rupanya. Apa lagi yang kau lihat?
+    - Penjaga kembali bersandar. 'Hm. Baiklah, aku mendengarkan.
+    rejectLines:
+    - Penjaga menyipitkan mata. 'Berhenti mengamatiku seperti itu.'
+    - Penjaga tampak terganggu. 'Kau pikir aku tidak sadar sedang diperhatikan?'
+  - approach: 1
+    veryLikeLines:
+    - Penjaga tersenyum lebar. 'Akhirnya seseorang yang tahu apa yang sedang dibicarakan.'
+    - Penjaga mengangguk antusias. 'Pengetahuanmu mengesankan. Aku ingin mendengar
+      lebih banyak.'
+    likeLines:
+    - Penjaga mengangguk. 'Masuk akal. Kau rupanya cukup memahami persoalannya.'
+    - Penjaga mulai tertarik. 'Hmm, penjelasan yang cukup bagus.'
+    neutralLines:
+    - Penjaga mendengarkan tanpa banyak bereaksi. 'Begitu rupanya.'
+    - Penjaga mengangkat bahu. 'Informasi yang menarik, mungkin.'
+    rejectLines:
+    - Penjaga mendengus. 'Aku tidak membutuhkan ceramah darimu.'
+    - Penjaga menggeleng kesal. 'Jangan mengira aku akan percaya begitu saja pada
+      perkataanmu.'
+  - approach: 2
+    veryLikeLines:
+    - Penjaga tersenyum puas. 'Tindakanmu membuktikan bahwa kau bisa diandalkan.'
+    - Penjaga menepuk bahumu. 'Bagus! Aku lebih menghargai orang yang bertindak daripada
+      sekadar bicara.'
+    likeLines:
+    - Penjaga mengangguk. 'Setidaknya kau bersedia melakukan sesuatu.'
+    - Penjaga tampak sedikit lega. 'Kerja bagus. Itu cukup membantu.'
+    neutralLines:
+    - Penjaga memperhatikan tindakanmu. 'Baiklah, setidaknya ada usaha.'
+    - Penjaga menghela napas. 'Hmm. Kita lihat apakah itu berguna.'
+    rejectLines:
+    - Penjaga segera menghentikanmu. 'Hei! Siapa yang menyuruhmu melakukan itu?'
+    - Penjaga mengangkat tombaknya. 'Jangan bertindak sembarangan di wilayah ini!'
+  - approach: 3
+    veryLikeLines:
+    - Penjaga tampak lebih rileks. 'Kau tahu kapan harus diam. Itu sesuatu yang jarang
+      kutemui.'
+    - Penjaga tersenyum kecil. 'Terima kasih telah memberiku waktu untuk berpikir.'
+    likeLines:
+    - Penjaga mengangguk. 'Tidak semua hal harus dijawab dengan kata-kata, rupanya.'
+    - Penjaga tampak lebih tenang. 'Baiklah, aku menghargai kesabaranmu.'
+    neutralLines:
+    - Penjaga terdiam sejenak. '...Ada yang ingin kau katakan?'
+    - Penjaga kembali memandang ke depan. 'Baiklah. Aku menunggu.'
+    rejectLines:
+    - Penjaga mengetuk gagang tombaknya. 'Bicara! Aku tidak punya waktu seharian!'
+    - Penjaga menghela napas kesal. 'Pergi kalau tidak ada yang ingin kau katakan,
+      jangan buang waktuku.'

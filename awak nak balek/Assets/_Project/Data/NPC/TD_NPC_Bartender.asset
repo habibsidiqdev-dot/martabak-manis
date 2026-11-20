@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
+  m_Name: TD_NPC_Bartender
+  m_EditorClassIdentifier: 
+  npcName: Bartender (Lara)
+  maxTurns: 5
+  targetResonance: 10
+  clueChance: 1
+  moodPool:
+  - mood: 0
+    min: 3
+    max: 3
+  - mood: 1
+    min: 1
+    max: 2
+  - mood: 2
+    min: 0
+    max: 0
+  - mood: 3
+    min: -2
+    max: -2
+  requiredItems:
+  - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
+  lockedDialogue: Aku kehabisan pasokan rempah esensial untuk racikan berikutnya.
+    Bantu aku ambil dulu.
+  rewardItems: []
+  introDescription: Aroma pekat rempah eksotis dan alkohol kualitas tinggi menguar
+    di udara. Sang bartender meramu koktail dengan presisi cepat layaknya seorang
+    petarung mengatur strategi, sebuah kontras ketangguhan di tengah kaum borjuis
+    yang manja.
+  introDialogue: Kerja bagus. Sekarang, apa yang bisa kubantu untuk melancarkan urusanmu?
+  winDialogue: Kerjasama yang bersih. Senang berbisnis denganmu di bar ini~
+  loseDialogue: Haish, payah. Ambil segelas tonik ini, sepertinya syaraf kepalamu
+    sedang butuh ditenangkan.
+  noClueText: "Ia menyeka gelas kristal dengan kain lap secara berulang-ulang tanpa
+    memedulikan tatapanmu.\r"
+  hints:
+  - approach: 0
+    likeLines:
+    - Ia tersenyum tipis, mengapresiasi caramu memperhatikan pekerjaannya yang remeh.
+    rejectLines:
+    - Ia sedikit mengalihkan pandangan dan gesekan alat pelnya darimu.
+  - approach: 1
+    likeLines:
+    - Ia terkesima dengan wawasanmu yang di luar dugaan.
+    rejectLines:
+    - Ia menggeleng-gelengkan kepala mendengar teori rumit yang tidak nyambung dari
+      mulutmu.
+  - approach: 2
+    likeLines:
+    - Etos kerja dan inisiatifmu membuat hatinya tersentuh.
+    rejectLines:
+    - Tangannya terulur ke depan, menghentikan gerakanmu yang dianggap terlalu sembrono.
+  - approach: 3
+    likeLines:
+    - Ada nada apresiasi yang tulus atas ketenangan dan kediaman yang kau bawa.
+    rejectLines:
+    - Kecanggungan mendadak mencuat di udara akibat diammu yang terlalu lama.
+  approachReactions:
+  - approach: 0
+    veryLikeLines:
+    - Ternyata masih ada orang yang sudi menghargai jerih payah sekecil ini.
+    likeLines:
+    - ini placeholder
+    neutralLines:
+    - ini placeholder
+    rejectLines:
+    - ....
+  - approach: 1
+    veryLikeLines:
+    - Aku tahu kalian para tamu adalah orang-orang terpelajar, tapi tak kusangka
+      seluas ini wawasanmu.
+    likeLines:
+    - ini placeholder
+    neutralLines:
+    - ini placeholder
+    rejectLines:
+    - Aku tidak tahu harus merespons apa, tapi perbaiki lagi teori-teorimu itu.
+  - approach: 2
+    veryLikeLines:
+    - Impresif! Mau coba mendaftar kerja paruh waktu bersamaku kapan-kapan?
+    likeLines:
+    - ini placeholder
+    neutralLines:
+    - ini placeholder
+    rejectLines:
+    - Tolong, jangan bertindak gegabah di area kerjaku
+  - approach: 3
+    veryLikeLines:
+    - Terima kasih karena tidak membuat gaduh dan memberiku sedikit ruang untuk bekerja.
+    likeLines:
+    - ini placeholder
+    neutralLines:
+    - ini placeholder
+    rejectLines:
+    - Ada masalah apa, kawan? Tiba-tiba kau membisu begitu.
