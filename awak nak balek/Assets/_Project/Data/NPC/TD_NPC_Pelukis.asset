@@ -32,7 +32,8 @@ MonoBehaviour:
   requiredItems: []
   lockedDialogue: Kecuali kau membawa pelarut cat atau alat pembersih yang kuminta
     dari bar, enyah sana!
-  rewardItems: []
+  rewardItems:
+  - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
   introDescription: 'Di dekat sudut galeri yang bermandikan cahaya lampu sorot hangat,
     sang pelukis berdiri di depan kanvas raksasa dengan tangan belepotan cat minyak.
     Napasnya memburu, matanya menyala oleh ambisi liar, frustrasi karena detail karya

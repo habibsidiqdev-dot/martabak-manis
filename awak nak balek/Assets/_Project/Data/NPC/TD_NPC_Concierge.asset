@@ -31,7 +31,8 @@ MonoBehaviour:
     max: -2
   requiredItems: []
   lockedDialogue: Ingin pergi cepat-cepat saudaraku? tunggu lah sejenak
-  rewardItems: []
+  rewardItems:
+  - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
   introDescription: 'Dengan teliti, ia menyelaraskan pulpen perak agar sejajar dengan
     Buku Tamu bersampul kulit, sambil merapikan sepotong kecil lavender kering di
     kerah jasnya. Ia melirik ke atas dari balik kacamata setengah bulan dengan senyum

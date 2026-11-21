@@ -32,7 +32,8 @@ MonoBehaviour:
   requiredItems: []
   lockedDialogue: ' Siapa kau? Temukan dulu pena perakku yang hilang, baru akan kupikirkan
     apakah kau cukup sepadan dengan waktuku.'
-  rewardItems: []
+  rewardItems:
+  - {fileID: 11400000, guid: 3db96a1ce1ca72f47a5d9f8d6ef1b6ca, type: 2}
   introDescription: "Kata demi kata dilontarkan dengan nada mengalun penuh pretensi\u2014setidaknya
     bagi para kaum intelektual di sekitarnya. Bait-bait puisi yang ia ucapkan sengaja
     dibuat rumit, berat, dan sulit dicerna. "

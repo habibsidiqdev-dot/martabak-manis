@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   displayName: Surat Jalan
-  description: Bukti izin lewat. Penjaga hanya mau bicara denganmu kalau kau membawanya.
+  description: surat izin untuk pergi atas tugas khusus dari sang pelukis. Beri ke
+    Concierge
   icon: {fileID: 0}

@@ -31,7 +31,8 @@ MonoBehaviour:
     max: -2
   requiredItems: []
   lockedDialogue: 
-  rewardItems: []
+  rewardItems:
+  - {fileID: 11400000, guid: 4b9393f2e8d59a14fb05d1fe2ab45859, type: 2}
   introDescription: "Tongkat pel bergerak teratur ke kanan dan ke kiri, diiringi
     siulan kecil sebuah lagu lama yang tak dikenal. Seorang paruh baya membersihkan
     sudut koridor dengan tenang, tampak pasrah sekaligus damai dengan keadaannya
