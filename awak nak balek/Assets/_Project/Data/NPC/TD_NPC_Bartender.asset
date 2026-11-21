@@ -34,73 +34,71 @@ MonoBehaviour:
   lockedDialogue: Aku kehabisan pasokan rempah esensial untuk racikan berikutnya.
     Bantu aku ambil dulu.
   rewardItems: []
-  introDescription: Aroma pekat rempah eksotis dan alkohol kualitas tinggi menguar
+  introDescription: Aroma pekat rempah eksotis dan minuman kualitas tinggi menguar
     di udara. Sang bartender meramu koktail dengan presisi cepat layaknya seorang
     petarung mengatur strategi, sebuah kontras ketangguhan di tengah kaum borjuis
     yang manja.
   introDialogue: Kerja bagus. Sekarang, apa yang bisa kubantu untuk melancarkan urusanmu?
   winDialogue: Kerjasama yang bersih. Senang berbisnis denganmu di bar ini~
-  loseDialogue: Haish, payah. Ambil segelas tonik ini, sepertinya syaraf kepalamu
-    sedang butuh ditenangkan.
+  loseDialogue: Ambil segelas tonik ini, sepertinya syaraf kepalamu sedang butuh
+    ditenangkan.
   noClueText: "Ia menyeka gelas kristal dengan kain lap secara berulang-ulang tanpa
     memedulikan tatapanmu.\r"
   hints:
   - approach: 0
     likeLines:
-    - Ia tersenyum tipis, mengapresiasi caramu memperhatikan pekerjaannya yang remeh.
+    - Ia menyeringai lebar dengan sorot mata tajam penuh pengakuan.
     rejectLines:
-    - Ia sedikit mengalihkan pandangan dan gesekan alat pelnya darimu.
+    - Sang bartender mendengus, tidak terkesan dengan gaya matamu.
   - approach: 1
     likeLines:
-    - Ia terkesima dengan wawasanmu yang di luar dugaan.
+    - Ia mengangguk mantap sambil menyilangkan tangan di depan dada.
     rejectLines:
-    - Ia menggeleng-gelengkan kepala mendengar teori rumit yang tidak nyambung dari
-      mulutmu.
+    - Ia mengernyit, kebingungan dengan istilah rumit yang kau lontarkan.
   - approach: 2
     likeLines:
-    - Etos kerja dan inisiatifmu membuat hatinya tersentuh.
+    - Ia menyukai kecepatan tanggap dan aksi nyata yang kau tunjukkan.
     rejectLines:
-    - Tangannya terulur ke depan, menghentikan gerakanmu yang dianggap terlalu sembrono.
+    - "\u201CIa menghela napas panjang melihat caramu bertindak yang gegabah."
   - approach: 3
     likeLines:
-    - Ada nada apresiasi yang tulus atas ketenangan dan kediaman yang kau bawa.
+    - Senyuman puas terlihat dari muka sang bartender
     rejectLines:
-    - Kecanggungan mendadak mencuat di udara akibat diammu yang terlalu lama.
+    - Sang bartender menatapmu heran dengan sebelah alis terangkat.
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - Ternyata masih ada orang yang sudi menghargai jerih payah sekecil ini.
+    - Mata elang mu sangat di apresiasi di pekerjaan ini~
     likeLines:
-    - ini placeholder
+    - Kau bisa bertahan di tempat seketat ini dengan mata jeli itu? Tidak buruk.
     neutralLines:
-    - ini placeholder
+    - Kau jeli, tapi hati-hati, mengamat seperti itu tinggi resiko
     rejectLines:
-    - ....
+    - Tatapan menyelidik seperti itu bisa membuat para tamu risi, kawan. Jaga matamu
   - approach: 1
     veryLikeLines:
-    - Aku tahu kalian para tamu adalah orang-orang terpelajar, tapi tak kusangka
-      seluas ini wawasanmu.
+    - Pelanggan dengan kepala yang terisi? aku suka itu.
     likeLines:
-    - ini placeholder
+    - "Cukup berbobot. Menarik, menarik juga jalan pikirmu.\u201D"
     neutralLines:
-    - ini placeholder
+    - oleh juga teorinya. Lanjut kalau ada intinya.
     rejectLines:
-    - Aku tidak tahu harus merespons apa, tapi perbaiki lagi teori-teorimu itu.
+    - ...Hah? Istilah apa lagi itu? Sudahlah, tidak penting.
   - approach: 2
     veryLikeLines:
-    - Impresif! Mau coba mendaftar kerja paruh waktu bersamaku kapan-kapan?
+    - Aksi dibanding suara, aku hormat padai orang seperti kamu!
     likeLines:
-    - ini placeholder
+    - "\u201CHooo, aku suka tipe orang cekatan sepertimu. Gerakan bagus!"
     neutralLines:
-    - ini placeholder
+    - Gerakan yang lumayan. Masih bisa lebih rapi lagi.
     rejectLines:
-    - Tolong, jangan bertindak gegabah di area kerjaku
+    - cukup bagus... tapi akan jauh lebih bagus kalau dipikirkan dulu waktunya.
   - approach: 3
     veryLikeLines:
-    - Terima kasih karena tidak membuat gaduh dan memberiku sedikit ruang untuk bekerja.
+    - Kamu sedang berbuat baik padaku hanya dengan diam~
     likeLines:
-    - ini placeholder
+    - Baguslah, setidaknya kau tahu kapan harus diam dan membiarkan orang bekerja.
     neutralLines:
-    - ini placeholder
+    - Diam saja? yasudah
     rejectLines:
-    - Ada masalah apa, kawan? Tiba-tiba kau membisu begitu.
+    - Tidak usah pasang muka kaku begitu. Kau bebas bersuara di bar ini, santai saja.
