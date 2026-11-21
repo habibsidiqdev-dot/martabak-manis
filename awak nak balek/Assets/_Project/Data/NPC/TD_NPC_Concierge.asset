@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
+  m_Name: TD_NPC_Concierge
+  m_EditorClassIdentifier: 
+  npcName: Concierge
+  maxTurns: 5
+  targetResonance: 10
+  clueChance: 1
+  moodPool:
+  - mood: 0
+    min: 3
+    max: 3
+  - mood: 1
+    min: 1
+    max: 2
+  - mood: 2
+    min: 0
+    max: 0
+  - mood: 3
+    min: -2
+    max: -2
+  requiredItems: []
+  lockedDialogue: Ingin pergi cepat-cepat saudaraku? tunggu lah sejenak
+  rewardItems: []
+  introDescription: 'Dengan teliti, ia menyelaraskan pulpen perak agar sejajar dengan
+    Buku Tamu bersampul kulit, sambil merapikan sepotong kecil lavender kering di
+    kerah jasnya. Ia melirik ke atas dari balik kacamata setengah bulan dengan senyum
+    teatrikal yang hangat namun terukur. '
+  introDialogue: "\u201CAh, saudaraku, ingin mencari udara segar? Malam masih sangat
+    muda! Keluar tanpa alasan yang jelas adalah tindakan yang vulgar, dan kita jelas
+    bukan orang-orang vulgar, bukan?\u201D \t"
+  winDialogue: "\u201CSempurna. Semuanya tertata rapi sesuai protokol. Sampaikan
+    salam hangatku kepada pihak studio, dan pastikan kau mengenakan pakaian yang
+    cukup hangat di luar. Selamat jalan, sahabatku.\u201D "
+  loseDialogue: "\u201CCk, ck, ck... Sungguh disayangkan. Kembalilah menikmati pesta
+    di dalam, dan cobalah merenungkan bagaimana orang-orang yang beradab seharusnya
+    bersikap.\u201D "
+  noClueText: Senyuman hangat dibawah kumis yang menawan itu membuat ekpresi nya
+    susah ditebak
+  hints:
+  - approach: 0
+    likeLines:
+    - Ia menunduk sedikit, matanya berbinar kagum seolah menemukan harta karun antik
+      di balik debu.
+    rejectLines:
+    - "\u201CIa sedikit meringis dan perlahan mengalihkan pandangannya darimu."
+  - approach: 0
+    likeLines:
+    - Ia menepuk punggung buku tamu dengan penuh takzim, tersenyum bangga seolah
+      baru bertemu rekan sefrekuensi.
+    rejectLines:
+    - Ia menghela napas, tampak lelah mendengar klaim-klaim yang belum terverifikasi.
+  - approach: 2
+    likeLines:
+    - Ia terbelalak kagum melihat gerak-gerikmu yang lugas namun tetap terjaga.
+    rejectLines:
+    - Dengan sigap ia menahan tanganmu menggunakan sapu tangan linen terlipat, mengerutkan
+      kening atas pelanggaran tata krama tersebut
+  - approach: 3
+    likeLines:
+    - "\u201CIa berhenti sejenak, menikmati keanggunan yang tenang dari jeda penuh
+      renungan"
+    rejectLines:
+    - Senyumnya mengeras menjadi garis tipis saat keheningan terasa canggung di antara
+      kalian.
+  approachReactions:
+  - approach: 0
+    veryLikeLines:
+    - "Astaga, kau memperhatikan ukiran tersembunyi di bingkai kaca itu?! Kejelianmu
+      sungguh menakjubkan, saudaraku\u2014seperti melihat mahakarya dengan mata telanjang!"
+    likeLines:
+    - Bahkan aku sendiri hampir lupa detail itu. kau memiliki penglihatan yang sangat
+      tajam!
+    neutralLines:
+    - Pengamatan yang cukup masuk akal. Menarik, meski belum sepenuhnya mengesankan.
+    rejectLines:
+    - ...Benarkah begitu? Ah, baguslah jika kau merasa demikian.
+  - approach: 1
+    veryLikeLines:
+    - Sungguh langka menemukan seseorang yang menguasai rincian sejarah sepresisi
+      ini! Kita jelas berasal dari lingkaran yang paham tata krama!
+    likeLines:
+    - "Wawasan pustaka di dalam dirimu ternyata cukup luas juga, Perpustakaan di
+      dirimu cukup luas juga, saudaraku.\r."
+    neutralLines:
+    - Informasi yang cukup lumayan. Sayangnya, sekadar tahu tidak selalu cukup untuk
+      membuka pintu.
+    rejectLines:
+    - Tidak semuanya di dunia ini harus terdengar... autentik, bukan?
+  - approach: 2
+    veryLikeLines:
+    - Oh, keberanian yang terukur! Jarang sekali ada yang bertindak segesit itu tanpa
+      merusak keanggunan ruangan!
+    likeLines:
+    - Seseorang yang penuh inisiatif dan aksi, ya? Menarik, sangat menarik.
+    neutralLines:
+    - Cukup sigap, kurasa. Tapi ingat, ini bukan arena pertandingan.
+    rejectLines:
+    - Sangat vulgar, saudaraku. Bisakah gerakan itu sedikit diredam?
+  - approach: 3
+    veryLikeLines:
+    - "\u201CAh... keheningan yang begitu berkelas. Tidak perlu banyak kata saat
+      dua pikiran saling memahami."
+    likeLines:
+    - Keheningan di sela-sela percakapan terkadang adalah hal terbaik.
+    neutralLines:
+    - Hening, ya. Baiklah, kuanggap kau sedang menyusun kata-kata.
+    rejectLines:
+    - Ahem, ini bukan ruang surat-menyurat rahasia, saudaraku. Jangan sungkan untuk
+      berbicara.

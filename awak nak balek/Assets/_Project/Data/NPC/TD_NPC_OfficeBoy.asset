@@ -32,10 +32,10 @@ MonoBehaviour:
   requiredItems: []
   lockedDialogue: 
   rewardItems: []
-  introDescription: 'Tongkat pel bergerak teratur ke kanan dan ke kiri, diiringi
+  introDescription: "Tongkat pel bergerak teratur ke kanan dan ke kiri, diiringi
     siulan kecil sebuah lagu lama yang tak dikenal. Seorang paruh baya membersihkan
     sudut koridor dengan tenang, tampak pasrah sekaligus damai dengan keadaannya
-    malam ini. '
+    malam ini. \r"
   introDialogue: "\u201C...Ya? Oh, kau ingin mencari jalan keluar? Yah, aku mengerti...
     Suasana di dalam sana memang bukan untuk semua orang, heh.\u201D\r"
   winDialogue: Hei, senang bisa ngobrol santai denganmu. Ambil kunci ini; kudengar
@@ -69,38 +69,40 @@ MonoBehaviour:
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - Ternyata masih ada orang yang sudi menghargai jerih payah sekecil ini.
+    - sampai detail noda di sudut ubin itu kau perhatikan? Mata awasmu membuatku
+      merasa kerjaanku tidak sia-sia!
     likeLines:
-    - ini placeholder
+    - Ternyata masih ada orang yang sudi menghargai jerih payah sekecil ini.
     neutralLines:
-    - ini placeholder
+    - Iya, kelihatan begitu ya. Biasalah, kerjaan rutin.
     rejectLines:
     - ....
   - approach: 1
     veryLikeLines:
+    - penjelasanmu sangat masuk akal! Baru kali ini ada tamu yang ngerti urusan teknis
+      sampai sedalam itu!
+    likeLines:
     - Aku tahu kalian para tamu adalah orang-orang terpelajar, tapi tak kusangka
       seluas ini wawasanmu.
-    likeLines:
-    - ini placeholder
     neutralLines:
-    - ini placeholder
+    - Ooh, begitu ya. Kedengarannya sih masuk akal.
     rejectLines:
     - Aku tidak tahu harus merespons apa, tapi perbaiki lagi teori-teorimu itu.
   - approach: 2
     veryLikeLines:
-    - Impresif! Mau coba mendaftar kerja paruh waktu bersamaku kapan-kapan?
+    - ' Gerak cepatmu benar benar meringankan beban kerjaku malam ini!'
     likeLines:
-    - ini placeholder
+    - Impresif! Mau coba mendaftar kerja paruh waktu bersamaku kapan-kapan?
     neutralLines:
-    - ini placeholder
+    - Lumayan juga geraknya. Asal jangan sampai buat  repot saja.
     rejectLines:
-    - Tolong, jangan bertindak gegabah di area kerjaku
+    - Tolong, jangan bertindak gegabah di area kerjaku.
   - approach: 3
     veryLikeLines:
-    - Terima kasih karena tidak membuat gaduh dan memberiku sedikit ruang untuk bekerja.
+    - aku apresiasi ketenangan yang kau beri
     likeLines:
-    - ini placeholder
+    - Terima kasih karena tidak membuat gaduh dan memberiku sedikit ruang untuk bekerja
     neutralLines:
-    - ini placeholder
+    - ...Aman, ya? Lanjut kalau gitu.
     rejectLines:
     - Ada masalah apa, kawan? Tiba-tiba kau membisu begitu.
