@@ -1,0 +1,633 @@
+#if (!UNITY_6000_6_OR_NEWER || SAINTSHIERARCHY_LEGACY) && !SAINTSHIERARCHY_NEW
+#define SAINTSHIERARCHY_USE_LEGACY
+#endif
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SaintsHierarchy.Editor.Core.Config;
+using UnityEditor;
+#if UNITY_2023_1_OR_NEWER
+using UnityEditor.Build;
+#endif
+using UnityEngine;
+using Object = UnityEngine.Object;
+
+namespace SaintsHierarchy.Editor.Core.Utils
+{
+    public static class SaintsMenu
+    {
+        private const string MenuRoot =
+#if !SAINTSHIERARCHY_DEBUG
+            "Tools/" +
+#endif
+            "Saints Hierarchy/";
+
+        private const string DisablePath = MenuRoot + "Disable Saints Hierarchy";
+
+        [MenuItem(MenuRoot + "Edit Config...", priority = -103)]
+        public static void EditConfig()
+        {
+            EditorWindow.GetWindow<ConfigEditWindow>().Show();
+        }
+
+        [MenuItem(DisablePath, priority=-102)]
+        public static void DisableSaintsHierarchy()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.disabled = !PersonalHierarchyConfig.instance.disabled;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.disabled = !SaintsHierarchyConfig.instance.disabled;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+#if SAINTSHIERARCHY_USE_LEGACY
+        [MenuItem(MenuRoot + "Force Use New Hierarchy", priority=-101)]
+#else
+        [MenuItem(MenuRoot + "Force Use Legacy Hierarchy", priority=-101)]
+#endif
+        public static void ForceUseHierarchy()
+        {
+            const string newApi = "SAINTSHIERARCHY_NEW";
+            const string oldApi = "SAINTSHIERARCHY_LEGACY";
+
+            // ReSharper disable InlineTemporaryVariable
+#if SAINTSHIERARCHY_USE_LEGACY
+            const string defineToAdd = newApi;
+            const string defineToRemove = oldApi;
+#else
+            const string defineToAdd = oldApi;
+            const string defineToRemove = newApi;
+#endif
+            // ReSharper restore InlineTemporaryVariable
+
+            RemoveCompileDefine(defineToRemove);
+            AddCompileDefine(defineToAdd);
+        }
+
+        private const string PersonalEnabledPath = MenuRoot + "Enable Personal Config";
+        private const string IndentGuidesPath = MenuRoot + "Indent Guides";
+
+        [MenuItem(IndentGuidesPath, priority = 0)]
+        public static void IndentGuides()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.indentGuides = !config.indentGuides;
+            config.SaveToDisk();
+            Refresh();
+        }
+
+        [MenuItem(PersonalEnabledPath, priority=-100)]
+        public static void PersonalEnabled()
+        {
+            if (!PersonalHierarchyConfig.instance.personalEnabled)
+            {
+                if (EditorUtility.DisplayDialog("Personal Config", "Copy project config to personal config?", "Yes",
+                        "No"))
+                {
+                    EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                    PersonalHierarchyConfig.instance.disabled = SaintsHierarchyConfig.instance.disabled;
+                    PersonalHierarchyConfig.instance.backgroundStrip = SaintsHierarchyConfig.instance.backgroundStrip;
+                    PersonalHierarchyConfig.instance.indentGuides = SaintsHierarchyConfig.instance.indentGuides;
+                    PersonalHierarchyConfig.instance.componentIcons = SaintsHierarchyConfig.instance.componentIcons;
+                    PersonalHierarchyConfig.instance.componentIconsForGeneralScripts = SaintsHierarchyConfig.instance.componentIconsForGeneralScripts;
+                    PersonalHierarchyConfig.instance.componentIconsForTransform = SaintsHierarchyConfig.instance.componentIconsForTransform;
+                    PersonalHierarchyConfig.instance.gameObjectEnabledChecker = SaintsHierarchyConfig.instance.gameObjectEnabledChecker;
+                    PersonalHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow = SaintsHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow;
+                    PersonalHierarchyConfig.instance.sceneGuidToGoConfigsList = SaintsHierarchyConfig.instance.sceneGuidToGoConfigsList.ToList();
+                    PersonalHierarchyConfig.instance.disableFavorites = SaintsHierarchyConfig.instance.disableFavorites;
+                    PersonalHierarchyConfig.instance.FavoriteClickToInspect = SaintsHierarchyConfig.instance.FavoriteClickToInspect;
+                    PersonalHierarchyConfig.instance.favorites = SaintsHierarchyConfig.instance.favorites.ToList();
+                    PersonalHierarchyConfig.instance.disableSceneSelector = SaintsHierarchyConfig.instance.disableSceneSelector;
+                    PersonalHierarchyConfig.instance.disableSceneFindInProject = SaintsHierarchyConfig.instance.disableSceneFindInProject;
+                    PersonalHierarchyConfig.instance.ReplaceContextMenu = SaintsHierarchyConfig.instance.ReplaceContextMenu;
+                    PersonalHierarchyConfig.instance.DefaultContextMenuIcons = SaintsHierarchyConfig.instance.DefaultContextMenuIcons;
+                    PersonalHierarchyConfig.instance.SaveContextMenuToProjectConfig = SaintsHierarchyConfig.instance.SaveContextMenuToProjectConfig;
+                    PersonalHierarchyConfig.instance.ContextPathOverrides.Clear();
+                    PersonalHierarchyConfig.instance.ContextPathOverrides.AddRange(SaintsHierarchyConfig.instance.ContextPathOverrides);
+                    PersonalHierarchyConfig.instance.ContextCustomGroups.Clear();
+                    PersonalHierarchyConfig.instance.ContextCustomGroups.AddRange(SaintsHierarchyConfig.instance.ContextCustomGroups);
+                    PersonalHierarchyConfig.instance.SaveToDisk();
+                }
+            }
+            EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+            PersonalHierarchyConfig.instance.personalEnabled = !PersonalHierarchyConfig.instance.personalEnabled;
+            PersonalHierarchyConfig.instance.SaveToDisk();
+            Refresh();
+        }
+
+#if SAINTSHIERARCHY_USE_LEGACY
+        private const string BackgroundStripPath = MenuRoot + "Background Strip";
+        [MenuItem(BackgroundStripPath, priority = 0)]
+        public static void BackgroundStrip()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.backgroundStrip = !PersonalHierarchyConfig.instance.backgroundStrip;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.backgroundStrip = !SaintsHierarchyConfig.instance.backgroundStrip;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+#endif
+
+        private const string ComponentIconsPath = MenuRoot + "Component Icons";
+        [MenuItem(ComponentIconsPath, priority=1)]
+        public static void ComponentIcons()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.componentIcons = !PersonalHierarchyConfig.instance.componentIcons;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.componentIcons = !SaintsHierarchyConfig.instance.componentIcons;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+        private const string ComponentIconsForGeneralScriptsPath = MenuRoot + "Component Icons For General Scripts";
+        [MenuItem(ComponentIconsForGeneralScriptsPath, priority=2)]
+        public static void ComponentIconsForGeneralScripts()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.componentIconsForGeneralScripts = !PersonalHierarchyConfig.instance.componentIconsForGeneralScripts;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.componentIconsForGeneralScripts = !SaintsHierarchyConfig.instance.componentIconsForGeneralScripts;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+#if SAINTSHIERARCHY_USE_LEGACY
+        [MenuItem(ComponentIconsForGeneralScriptsPath, true)]
+        private static bool ValidateComponentIconsForGeneralScripts()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            return personalEnabled
+                ? PersonalHierarchyConfig.instance.componentIcons
+                : SaintsHierarchyConfig.instance.componentIcons;
+        }
+
+#endif
+
+        private const string ComponentIconsForTransformPath = MenuRoot + "Component Icons For Transform";
+        [MenuItem(ComponentIconsForTransformPath, priority=3)]
+        public static void ComponentIconsForTransform()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.componentIconsForTransform = !PersonalHierarchyConfig.instance.componentIconsForTransform;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.componentIconsForTransform = !SaintsHierarchyConfig.instance.componentIconsForTransform;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+#if SAINTSHIERARCHY_USE_LEGACY
+        [MenuItem(ComponentIconsForTransformPath, true)]
+        private static bool ValidateComponentIconsForTransform()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            return personalEnabled
+                ? PersonalHierarchyConfig.instance.componentIcons
+                : SaintsHierarchyConfig.instance.componentIcons;
+        }
+
+        #region GameObject Enabled Checker
+        private const string GameObjectEnabledCheckerPath = MenuRoot + "GameObject Enabled Checker";
+        [MenuItem(GameObjectEnabledCheckerPath, priority=4)]
+        public static void GameObjectEnabledChecker()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.gameObjectEnabledChecker = !PersonalHierarchyConfig.instance.gameObjectEnabledChecker;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.gameObjectEnabledChecker = !SaintsHierarchyConfig.instance.gameObjectEnabledChecker;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+        private const string GameObjectEnabledCheckerEveryRowPath = MenuRoot + "GameObject Enabled Checker Every Row";
+        [MenuItem(GameObjectEnabledCheckerEveryRowPath, priority=5)]
+        public static void GameObjectEnabledCheckerEveryRow()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow = !PersonalHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow = !SaintsHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+        [MenuItem(GameObjectEnabledCheckerEveryRowPath, true)]
+        private static bool ValidateGameObjectEnabledCheckerEveryRowPath()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            return personalEnabled
+                ? PersonalHierarchyConfig.instance.gameObjectEnabledChecker
+                : SaintsHierarchyConfig.instance.gameObjectEnabledChecker;
+        }
+        #endregion
+#endif
+
+        #region Default Icon
+        private const string NoDefaultIconPath = MenuRoot + "No Default Icon";
+        [MenuItem(NoDefaultIconPath, priority = 6)]
+        public static void NoDefaultIcon()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.noDefaultIcon = !PersonalHierarchyConfig.instance.noDefaultIcon;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.noDefaultIcon = !SaintsHierarchyConfig.instance.noDefaultIcon;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+
+        private const string TransparentDefaultIconPath = MenuRoot + "Transparent Default Icon";
+        [MenuItem(TransparentDefaultIconPath, priority = 7)]
+        public static void TransparentDefaultIcon()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                EditorUtility.SetDirty(PersonalHierarchyConfig.instance);
+                PersonalHierarchyConfig.instance.transparentDefaultIcon = !PersonalHierarchyConfig.instance.transparentDefaultIcon;
+                PersonalHierarchyConfig.instance.SaveToDisk();
+            }
+            else
+            {
+                EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                SaintsHierarchyConfig.instance.transparentDefaultIcon = !SaintsHierarchyConfig.instance.transparentDefaultIcon;
+                SaintsHierarchyConfig.instance.SaveToDisk();
+            }
+
+            Refresh();
+        }
+        [MenuItem(TransparentDefaultIconPath, true)]
+        private static bool ValidateTransparentDefaultIcon()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalEnabled)
+            {
+                return !PersonalHierarchyConfig.instance.noDefaultIcon;
+            }
+
+            return !SaintsHierarchyConfig.instance.noDefaultIcon;
+        }
+        #endregion
+
+        private const string DisableFavoritesPath = MenuRoot + "Disable Favorites";
+
+        [MenuItem(DisableFavoritesPath, priority = 8)]
+        public static void DisableFavorites()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.disableFavorites = !config.disableFavorites;
+            config.SaveToDisk();
+
+            if (!config.disableFavorites)
+            {
+                HierarchyEditorEvents.RequestInitialize();
+            }
+
+            Refresh();
+        }
+
+        private const string FavoriteClickToInspectPath = MenuRoot + "Favorite Click To Inspect";
+
+        [MenuItem(FavoriteClickToInspectPath, priority = 9)]
+        public static void FavoriteClickToInspect()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.FavoriteClickToInspect = !config.FavoriteClickToInspect;
+            config.SaveToDisk();
+
+            Refresh();
+        }
+
+        [MenuItem(FavoriteClickToInspectPath, true)]
+        public static bool FavoriteClickToInspectValidate()
+        {
+            IConfig config = Util.GetUsingConfig();
+            return !config.disableFavorites;
+        }
+
+        private const string SaveFavoritesToProjectConfigPath = MenuRoot + "Save Favorites To Project Config";
+
+        [MenuItem(SaveFavoritesToProjectConfigPath, priority = 10)]
+        public static void SaveFavoritesToProjectConfig()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.saveFavoritesToProjectConfig = !config.saveFavoritesToProjectConfig;
+            if (config.saveFavoritesToProjectConfig)
+            {
+                if (PersonalHierarchyConfig.instance.favorites.Count > 0 && EditorUtility.DisplayDialog("Personal Config", "Copy personal favorite config to project config?",
+                        "Yes",
+                        "No"))
+                {
+                    SaintsHierarchyConfig.instance.favorites.Clear();
+                    SaintsHierarchyConfig.instance.favorites.AddRange(PersonalHierarchyConfig.instance.favorites);
+                    EditorUtility.SetDirty(SaintsHierarchyConfig.instance);
+                    SaintsHierarchyConfig.instance.SaveToDisk();
+                }
+            }
+            config.SaveToDisk();
+
+            Refresh();
+        }
+
+        [MenuItem(SaveFavoritesToProjectConfigPath, true)]
+        public static bool SaveFavoritesToProjectConfigValidate()
+        {
+            IConfig config = Util.GetUsingConfig();
+            return !config.disableFavorites;
+        }
+
+        #region Scene Selector
+
+        private const string DisableSceneSelectorPath = MenuRoot + "Disable Scene Selector";
+
+        [MenuItem(DisableSceneSelectorPath, priority = 11)]
+        public static void DisableSceneSelector()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.disableSceneSelector = !config.disableSceneSelector;
+            config.SaveToDisk();
+
+            Refresh();
+        }
+
+        [MenuItem(DisableSceneSelectorPath, true)]
+        public static bool DisableSceneSelectorValidate()
+        {
+            IConfig config = Util.GetUsingConfig();
+            return !config.disableFavorites;
+        }
+
+        #endregion
+
+        private const string DisableSceneFindInProjectPath = MenuRoot + "Disable Scene Find In Project";
+
+        [MenuItem(DisableSceneFindInProjectPath, priority = 12)]
+        public static void DisableSceneFindInProject()
+        {
+            IConfig config = Util.GetUsingConfig();
+            EditorUtility.SetDirty((Object)config);
+            config.disableSceneFindInProject = !config.disableSceneFindInProject;
+            config.SaveToDisk();
+
+            Refresh();
+        }
+
+
+        private const string ReplaceContextMenuPath = MenuRoot + "Replace Context Menu";
+        private const string DefaultContextMenuIconsPath = MenuRoot + "Default Context Menu Icons";
+        private const string SaveContextMenuToProjectConfigPath = MenuRoot + "Save Context Menu To Project Config";
+
+        [MenuItem(ReplaceContextMenuPath, false, 20)]
+        private static void ReplaceContextMenu() => ToggleContextOption("Replace Context Menu", config => config.ReplaceContextMenu = !config.ReplaceContextMenu);
+
+        [MenuItem(DefaultContextMenuIconsPath, false, 21)]
+        private static void DefaultContextMenuIcons() => ToggleContextOption("Default Context Menu Icons", config => config.DefaultContextMenuIcons = !config.DefaultContextMenuIcons);
+
+        [MenuItem(SaveContextMenuToProjectConfigPath, false, 22)]
+        private static void SaveContextMenuToProjectConfig() => ToggleContextOption("Save Context Menu To Project Config", config => config.SaveContextMenuToProjectConfig = !config.SaveContextMenuToProjectConfig);
+
+        private static void ToggleContextOption(string label, Action<IConfig> change)
+        {
+            IConfig config = Util.GetUsingConfig();
+            HierarchyContextConfigStore.Edit(config, label, () => change(config));
+            Refresh();
+        }
+
+        internal static void Refresh()
+        {
+            HierarchyEditorEvents.RequestInitialize();
+            EditorApplication.RepaintHierarchyWindow();
+            Checkmark();
+        }
+
+        [InitializeOnLoadMethod]
+        private static void OnLoad()
+        {
+            EditorApplication.delayCall += Checkmark;
+        }
+
+        private static void Checkmark()
+        {
+            bool personalEnabled = PersonalHierarchyConfig.instance.personalEnabled;
+            Menu.SetChecked(PersonalEnabledPath, personalEnabled);
+
+            bool disabled = personalEnabled? PersonalHierarchyConfig.instance.disabled : SaintsHierarchyConfig.instance.disabled;
+            Menu.SetChecked(DisablePath, disabled);
+            Menu.SetChecked(IndentGuidesPath, Util.GetUsingConfig().indentGuides);
+            Menu.SetChecked(ReplaceContextMenuPath, Util.GetUsingConfig().ReplaceContextMenu);
+            Menu.SetChecked(DefaultContextMenuIconsPath, Util.GetUsingConfig().DefaultContextMenuIcons);
+            Menu.SetChecked(SaveContextMenuToProjectConfigPath, Util.GetUsingConfig().SaveContextMenuToProjectConfig);
+
+#if SAINTSHIERARCHY_USE_LEGACY
+            bool backgroundStrip = personalEnabled?  PersonalHierarchyConfig.instance.backgroundStrip : SaintsHierarchyConfig.instance.backgroundStrip;
+            Menu.SetChecked(BackgroundStripPath, backgroundStrip);
+
+            bool gameObjectEnabledChecker = personalEnabled? PersonalHierarchyConfig.instance.gameObjectEnabledChecker : SaintsHierarchyConfig.instance.gameObjectEnabledChecker;
+            Menu.SetChecked(GameObjectEnabledCheckerPath, gameObjectEnabledChecker);
+
+            bool gameObjectEnabledCheckerEveryRow = personalEnabled? PersonalHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow : SaintsHierarchyConfig.instance.gameObjectEnabledCheckerEveryRow;
+            Menu.SetChecked(GameObjectEnabledCheckerEveryRowPath, gameObjectEnabledCheckerEveryRow);
+#endif
+
+            bool componentIcons = personalEnabled? PersonalHierarchyConfig.instance.componentIcons : SaintsHierarchyConfig.instance.componentIcons;
+            Menu.SetChecked(ComponentIconsPath, componentIcons);
+
+            bool componentIconsForGeneralScripts = personalEnabled
+                ? PersonalHierarchyConfig.instance.componentIconsForGeneralScripts
+                : SaintsHierarchyConfig.instance.componentIconsForGeneralScripts;
+            // ReSharper disable once RedundantLogicalConditionalExpressionOperand
+            Menu.SetChecked(ComponentIconsForGeneralScriptsPath, componentIcons && componentIconsForGeneralScripts);
+
+            bool componentIconsForTransform = personalEnabled
+                ? PersonalHierarchyConfig.instance.componentIconsForTransform
+                : SaintsHierarchyConfig.instance.componentIconsForTransform;
+            // ReSharper disable once RedundantLogicalConditionalExpressionOperand
+            Menu.SetChecked(ComponentIconsForTransformPath, componentIcons && componentIconsForTransform);
+
+            bool noDefaultIcon = personalEnabled? PersonalHierarchyConfig.instance.noDefaultIcon : SaintsHierarchyConfig.instance.noDefaultIcon;
+            Menu.SetChecked(NoDefaultIconPath, noDefaultIcon);
+
+            bool transparentDefaultIcon = personalEnabled? PersonalHierarchyConfig.instance.transparentDefaultIcon : SaintsHierarchyConfig.instance.transparentDefaultIcon;
+            Menu.SetChecked(TransparentDefaultIconPath, transparentDefaultIcon);
+
+            bool disableFavorites = Util.GetUsingConfig().disableFavorites;
+            Menu.SetChecked(DisableFavoritesPath, disableFavorites);
+
+            bool favoriteClickToInspect = Util.GetUsingConfig().FavoriteClickToInspect;
+            Menu.SetChecked(FavoriteClickToInspectPath, favoriteClickToInspect);
+
+            bool saveFavoritesToProjectConfig = Util.GetUsingConfig().saveFavoritesToProjectConfig;
+            Menu.SetChecked(SaveFavoritesToProjectConfigPath, saveFavoritesToProjectConfig);
+
+            bool disableSceneSelector = Util.GetUsingConfig().disableSceneSelector;
+            Menu.SetChecked(DisableSceneSelectorPath, disableSceneSelector);
+
+            bool disableSceneFindInProject = Util.GetUsingConfig().disableSceneFindInProject;
+            Menu.SetChecked(DisableSceneFindInProjectPath, disableSceneFindInProject);
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static void AddCompileDefine(string newDefineCompileConstant, IEnumerable<BuildTargetGroup> targetGroups = null)
+        {
+            IEnumerable<BuildTargetGroup> targets = targetGroups ?? Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>();
+
+            foreach (BuildTargetGroup grp in targets.Where(each => each != BuildTargetGroup.Unknown))
+            {
+                string defines;
+                try
+                {
+#if UNITY_2023_1_OR_NEWER
+                    defines = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(grp));
+#else
+                    defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(grp);
+#endif
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+                if (!defines.Contains(newDefineCompileConstant))
+                {
+                    if (defines.Length > 0)
+                        defines += ";";
+
+                    defines += newDefineCompileConstant;
+                    try
+                    {
+#if UNITY_2023_1_OR_NEWER
+                        PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(grp), defines);
+#else
+                        PlayerSettings.SetScriptingDefineSymbolsForGroup(grp, defines);
+#endif
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+            }
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static void RemoveCompileDefine(string defineCompileConstant, IEnumerable<BuildTargetGroup> targetGroups = null)
+        {
+            IEnumerable<BuildTargetGroup> targets = targetGroups ?? Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>();
+
+            foreach (BuildTargetGroup grp in targets.Where(each => each != BuildTargetGroup.Unknown))
+            {
+                string defines;
+                try
+                {
+#if UNITY_2023_1_OR_NEWER
+                    defines = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(grp));
+#else
+                    defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(grp);
+#endif
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+
+                string result = string.Join(";", defines
+                    .Split(';')
+                    .Select(each => each.Trim())
+                    .Where(each => each != defineCompileConstant));
+
+                // Debug.Log(result);
+
+                try
+                {
+#if UNITY_2023_1_OR_NEWER
+                    PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(grp), result);
+#else
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(grp, result);
+#endif
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
+        }
+    }
+}

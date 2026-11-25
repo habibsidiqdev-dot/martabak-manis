@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7fe1c17795ee8074685999e53cf49e4b
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 12385, guid: 0000000000000000e000000000000000, type: 0}
+  disableValidation: 0
+  unsupportedSelectorAction: 0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Editor Default Resources/SaintsHierarchy/UIToolkit/FavoriteConfigPanelStyle.uss
+  uploadId: 1058616

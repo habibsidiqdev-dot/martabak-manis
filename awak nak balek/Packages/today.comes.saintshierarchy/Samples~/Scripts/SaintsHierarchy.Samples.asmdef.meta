@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fdd35a747fe38404da153a8e96c2f2cc
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Samples~/Scripts/SaintsHierarchy.Samples.asmdef
+  uploadId: 1058616

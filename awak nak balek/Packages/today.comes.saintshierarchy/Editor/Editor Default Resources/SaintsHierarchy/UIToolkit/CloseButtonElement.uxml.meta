@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8914c3d220619d444a53da06e95e8b7e
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Editor Default Resources/SaintsHierarchy/UIToolkit/CloseButtonElement.uxml
+  uploadId: 1058616

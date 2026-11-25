@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ee8f553e2be929b408a05f8f7584234e
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Editor Default Resources/SaintsHierarchy/UIToolkit/ItemButton.uxml
+  uploadId: 1058616

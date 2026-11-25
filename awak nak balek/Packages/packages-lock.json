@@ -255,6 +255,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "today.comes.saintshierarchy": {
+      "version": "file:today.comes.saintshierarchy",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

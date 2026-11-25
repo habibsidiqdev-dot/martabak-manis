@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: fc7e5f12150c4f5a898b237b62a2a9a6
+timeCreated: 1777540221
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Core/UIElement/TreeDropdown/TreeRowValueElement.cs
+  uploadId: 1058616

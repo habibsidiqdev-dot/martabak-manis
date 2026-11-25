@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4e8d00e3df1e5b3498acf19259811c37
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Samples~/RawResources/Directional
+    Light.prefab
+  uploadId: 1058616
