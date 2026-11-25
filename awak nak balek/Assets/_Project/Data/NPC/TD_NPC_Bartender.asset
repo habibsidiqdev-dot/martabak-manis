@@ -30,7 +30,7 @@ MonoBehaviour:
     min: -2
     max: -2
   requiredItems:
-  - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
+  - {fileID: 11400000, guid: bf81f9875980de84aab442110ba8ca6c, type: 2}
   lockedDialogue: Aku kehabisan pasokan rempah esensial untuk racikan berikutnya.
     Bantu aku ambil dulu.
   rewardItems:

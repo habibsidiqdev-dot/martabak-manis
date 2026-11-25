@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
   m_Name: TD_NPC_OfficeBoy
   m_EditorClassIdentifier: 
-  npcName: Office Boy (Dean)
+  npcName: Cleaning (Dean)
   maxTurns: 5
   targetResonance: 10
   clueChance: 1

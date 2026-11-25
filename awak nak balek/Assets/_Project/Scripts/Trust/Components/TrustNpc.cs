@@ -49,7 +49,6 @@ namespace TrustSystem
         private bool _resolving;
         private bool _won;
         private bool _unlocked;
-        private string _rewardMessage;
 
         private Vector3 AnchorPosition =>
             stageAnchor != null ? stageAnchor.position : transform.position + Vector3.up * 1.2f;
@@ -184,10 +183,9 @@ namespace TrustSystem
             return false;
         }
 
+        // Notifikasi "item didapat" muncul sendiri di kanan bawah (ItemNotificationUI, lewat PlayerInventory.ItemAdded).
         private void GiveRewards()
         {
-            _rewardMessage = null;
-
             IReadOnlyList<ItemData> rewards = data.RewardItems;
             if (_inventory == null || rewards == null) return;
 
@@ -195,9 +193,6 @@ namespace TrustSystem
             {
                 if (rewards[i] != null) _inventory.Add(rewards[i]);
             }
-
-            string names = ItemData.FormatList(rewards);
-            if (names.Length > 0) _rewardMessage = $"Mendapat: {names}";
         }
 
         // ---------- Alur encounter ----------
@@ -214,26 +209,30 @@ namespace TrustSystem
 
         private void PresentTurn(string preface)
         {
+            // Gaya lewat rich text TMP: intro description = tebal (tidak miring), petunjuk/clue = miring.
+            // Supaya jalan, gaya dasar teks petunjuk di UI harus Normal (tag </i> tidak bisa mematikan italic dari gaya dasar).
             var sb = new StringBuilder();
 
             if (!string.IsNullOrEmpty(preface))
-                sb.AppendLine(preface).AppendLine();
+                sb.Append("<b>").Append(preface).Append("</b>").AppendLine().AppendLine();
 
+            var hints = new StringBuilder();
             IReadOnlyList<Clue> clues = _encounter.Clues;
             if (clues.Count == 0)
             {
-                sb.Append(data.NoClueText);
+                hints.Append(data.NoClueText);
             }
             else
             {
                 for (int i = 0; i < clues.Count; i++)
                 {
                     string line = data.GetClueText(clues[i].Approach, clues[i].Mood);
-                    if (!string.IsNullOrEmpty(line)) sb.AppendLine(line);
+                    if (!string.IsNullOrEmpty(line)) hints.AppendLine(line);
                 }
             }
 
-            _view.SetDescription(sb.ToString().TrimEnd());
+            sb.Append("<i>").Append(hints.ToString().TrimEnd()).Append("</i>");
+            _view.SetDescription(sb.ToString());
             RefreshStatus();
             _view.SetInputEnabled(true);
         }
@@ -259,7 +258,7 @@ namespace TrustSystem
             if (!string.IsNullOrEmpty(reaction)) _view.SetDialogue(reaction);
 
             string feedback = $"Kamu memilih {result.Approach.Label()}.   Resonansi {result.Delta.ToString("+0;-0;0")}";
-            _view.SetDescription(feedback);
+            _view.SetDescription("<i>" + feedback + "</i>");   // tetap miring seperti petunjuk
 
             yield return new WaitForSeconds(resultDelay);
 
@@ -301,9 +300,6 @@ namespace TrustSystem
             Cleanup(blendBack: true);   // kamera kembali dulu, baru gameplay aktif lagi
 
             if (!won) return;
-
-            if (_player != null && !string.IsNullOrEmpty(_rewardMessage))
-                _player.ShowMessage(_rewardMessage);
 
             onTrustWon.Invoke();
         }

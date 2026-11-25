@@ -25,6 +25,9 @@ public class PlayerInventory : MonoBehaviour
 
     public event Action Changed;
 
+    /// <summary>Dipanggil tiap item BARU masuk lewat Add (ambil di dunia, hadiah NPC). Dipakai ItemNotificationUI.</summary>
+    public event Action<ItemData> ItemAdded;
+
     private void EnsureInitialized()
     {
         // The demo builder adds this component before assigning its serialized list.
@@ -45,6 +48,7 @@ public class PlayerInventory : MonoBehaviour
         if (item == null) return;
         _items.Add(item);
         Changed?.Invoke();
+        ItemAdded?.Invoke(item);
     }
 
     public bool Remove(ItemData item)

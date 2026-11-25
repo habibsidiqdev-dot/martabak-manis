@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
   m_Name: TD_NPC_Pelukis
   m_EditorClassIdentifier: 
-  npcName: Pelukis
+  npcName: Artist (Elise)
   maxTurns: 5
   targetResonance: 10
   clueChance: 1
@@ -29,7 +29,8 @@ MonoBehaviour:
   - mood: 3
     min: -2
     max: -2
-  requiredItems: []
+  requiredItems:
+  - {fileID: 11400000, guid: c544d895c91904245884e8a3f9b28aa6, type: 2}
   lockedDialogue: Kecuali kau membawa pelarut cat atau alat pembersih yang kuminta
     dari bar, enyah sana!
   rewardItems:

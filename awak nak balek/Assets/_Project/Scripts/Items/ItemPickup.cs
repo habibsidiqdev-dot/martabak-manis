@@ -26,11 +26,8 @@ public class ItemPickup : MonoBehaviour, IInteractable
             return;
         }
 
-        inventory.Add(item);
+        inventory.Add(item);   // notifikasi kanan bawah muncul lewat ItemNotificationUI (PlayerInventory.ItemAdded)
         _taken = true;
-
-        if (interactor.TryGetComponent(out PlayerInteractor messages))
-            messages.ShowMessage($"Mendapat: {item.DisplayName}");
 
         gameObject.SetActive(false);
     }

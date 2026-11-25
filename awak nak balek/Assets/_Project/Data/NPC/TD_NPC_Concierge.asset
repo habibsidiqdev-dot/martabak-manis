@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
   m_Name: TD_NPC_Concierge
   m_EditorClassIdentifier: 
-  npcName: Concierge
+  npcName: Concierge (Sebastian)
   maxTurns: 5
   targetResonance: 10
   clueChance: 1
@@ -29,7 +29,9 @@ MonoBehaviour:
   - mood: 3
     min: -2
     max: -2
-  requiredItems: []
+  requiredItems:
+  - {fileID: 11400000, guid: 3db96a1ce1ca72f47a5d9f8d6ef1b6ca, type: 2}
+  - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
   lockedDialogue: Ingin pergi cepat-cepat saudaraku? tunggu lah sejenak
   rewardItems:
   - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
@@ -55,7 +57,7 @@ MonoBehaviour:
       di balik debu.
     rejectLines:
     - "\u201CIa sedikit meringis dan perlahan mengalihkan pandangannya darimu."
-  - approach: 0
+  - approach: 1
     likeLines:
     - Ia menepuk punggung buku tamu dengan penuh takzim, tersenyum bangga seolah
       baru bertemu rekan sefrekuensi.
