@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: TD_NPC_Pelukis
   m_EditorClassIdentifier: 
   npcName: Artist (Elise)
-  maxTurns: 5
-  targetResonance: 10
-  clueChance: 1
+  maxTurns: 4
+  targetResonance: 8
+  clueChance: 0.75
   moodPool:
   - mood: 0
     min: 3
     max: 3
   - mood: 1
-    min: 1
+    min: 2
     max: 2
   - mood: 2
     min: 0
@@ -51,24 +51,25 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - Kuas dicengkam erat-erat, mata berbinar bisa terlihat dari sang pelukis
+    - With you here, her brushstrokes got more...showy
     rejectLines:
-    - "\u201CIa menepis pandanganmu dengan kibasan kuas yang hampir mengenai jasmu."
+    - Her brushstrokes are getting weaker having eyes looking at her
   - approach: 1
     likeLines:
-    - Sang pelukis terlihat seperti baru saja dapat sebuah pencerahan
+    - She asks you if your familiar with the inspiration for her art style
     rejectLines:
-    - Ia mendengus keras, menganggap ucapanmu sebagai omong kosong estetika.
+    - She told her frustation to you about people here talking about art like they
+      can even paint
   - approach: 2
     likeLines:
-    - Ia antusias melihat kesiagapan mu
+    - She hand you a small canvas to have you do something too
     rejectLines:
-    - Ia memekik kesal saat kau menyentuh area kanvas yang masih basah
+    - She darted her eyes on her painting, and ask you to not touch it
   - approach: 3
     likeLines:
-    - Ia menutup mata dan menghela nafas lega
+    - She is visibly thinking and shot down any attempts of talking for you
     rejectLines:
-    - Ia membentak karena mengira kau sedang meremehkan kepanikannya
+    - She struggle to focus without talking with a single soul
   approachReactions:
   - approach: 0
     veryLikeLines:

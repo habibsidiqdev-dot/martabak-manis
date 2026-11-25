@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: TD_NPC_OfficeBoy
   m_EditorClassIdentifier: 
   npcName: Cleaning (Dean)
-  maxTurns: 5
-  targetResonance: 10
-  clueChance: 1
+  maxTurns: 6
+  targetResonance: 5
+  clueChance: 0.15
   moodPool:
   - mood: 0
     min: 3
     max: 3
   - mood: 1
-    min: 1
+    min: 2
     max: 2
   - mood: 2
     min: 0
@@ -48,25 +48,29 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - Ia tersenyum tipis, mengapresiasi caramu memperhatikan pekerjaannya yang remeh.
+    - He's showing off his mastery in cleanliness, signaling you to see his work
     rejectLines:
-    - Ia sedikit mengalihkan pandangan dan gesekan alat pelnya darimu.
+    - He's slowing down his mopping, he doesnt seem to be comfortable being looked
+      at
   - approach: 1
     likeLines:
-    - Ia terkesima dengan wawasanmu yang di luar dugaan.
+    - He noticed your rather educated stance, with eyes of wanting to ask, assuming
+      you are indeed educated
     rejectLines:
-    - Ia menggeleng-gelengkan kepala mendengar teori rumit yang tidak nyambung dari
-      mulutmu.
+    - He is rather confused with how you talk so technically.
   - approach: 2
     likeLines:
-    - Etos kerja dan inisiatifmu membuat hatinya tersentuh.
+    - He signals you to help him clean up and not just stand there watching the floor
+      dry
     rejectLines:
-    - Tangannya terulur ke depan, menghentikan gerakanmu yang dianggap terlalu sembrono.
+    - He pointed you to a dry place, asking you to not get involved in his work
   - approach: 3
     likeLines:
-    - Ada nada apresiasi yang tulus atas ketenangan dan kediaman yang kau bawa.
+    - He sings along the music he blasted on his headphones, everytime you talk he
+      sings louder
     rejectLines:
-    - Kecanggungan mendadak mencuat di udara akibat diammu yang terlalu lama.
+    - During gaps of the  conversation, He tries to do small talks to break up the
+      akwardness
   approachReactions:
   - approach: 0
     veryLikeLines:
