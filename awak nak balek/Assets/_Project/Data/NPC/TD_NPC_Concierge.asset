@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: TD_NPC_Concierge
   m_EditorClassIdentifier: 
   npcName: Concierge (Sebastian)
-  maxTurns: 5
-  targetResonance: 10
+  maxTurns: 4
+  targetResonance: 9
   clueChance: 1
   moodPool:
   - mood: 0
     min: 3
     max: 3
   - mood: 1
-    min: 1
+    min: 2
     max: 2
   - mood: 2
     min: 0
@@ -53,29 +53,28 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - Ia menunduk sedikit, matanya berbinar kagum seolah menemukan harta karun antik
-      di balik debu.
+    - He's tidying his luxurious little collection, waiting for you to make a comment
+      onit
     rejectLines:
-    - "\u201CIa sedikit meringis dan perlahan mengalihkan pandangannya darimu."
+    - He puts away his favorite pen, he knows it is a conversation starter and would
+      rather not for you to notice it
   - approach: 1
     likeLines:
-    - Ia menepuk punggung buku tamu dengan penuh takzim, tersenyum bangga seolah
-      baru bertemu rekan sefrekuensi.
+    - He asked for your opinion of the current socioeconomic conditions around here
     rejectLines:
-    - Ia menghela napas, tampak lelah mendengar klaim-klaim yang belum terverifikasi.
+    - He irritates at you about experiences with the "knowhow" people
   - approach: 2
     likeLines:
-    - Ia terbelalak kagum melihat gerak-gerikmu yang lugas namun tetap terjaga.
+    - Since you have nothing better to do, he ask you to help him tidy up the coat
+      rack
     rejectLines:
-    - Dengan sigap ia menahan tanganmu menggunakan sapu tangan linen terlipat, mengerutkan
-      kening atas pelanggaran tata krama tersebut
+    - He strictly told you to NOT touch the coats
   - approach: 3
     likeLines:
-    - "\u201CIa berhenti sejenak, menikmati keanggunan yang tenang dari jeda penuh
-      renungan"
+    - He is busy on phonecalls with important people, and did not let you to ask
+      anything
     rejectLines:
-    - Senyumnya mengeras menjadi garis tipis saat keheningan terasa canggung di antara
-      kalian.
+    - He tapped his fingers on the table, waiting for any noise
   approachReactions:
   - approach: 0
     veryLikeLines:

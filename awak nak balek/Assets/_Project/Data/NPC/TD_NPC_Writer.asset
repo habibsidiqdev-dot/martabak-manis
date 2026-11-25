@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Writer (...)
   maxTurns: 5
-  targetResonance: 10
-  clueChance: 1
+  targetResonance: 7
+  clueChance: 0.55
   moodPool:
   - mood: 0
     min: 3
     max: 3
   - mood: 1
-    min: 1
+    min: 2
     max: 2
   - mood: 2
     min: 0
@@ -50,25 +50,25 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - Ia mengangkat dagu tinggi-tinggi, matanya berkilat penuh kebanggaan puitis
+    - He shoves you his magnificant writing for you to stick your eyes
     rejectLines:
-    - Sang Sastrawan menoleh dan memelototi dengan tatapan aneh.
+    - He takes away his notebook, deeming his works not worth your eyes
   - approach: 1
     likeLines:
-    - Ia bertepuk tangan pelan dengan wajah berseri-seri penuh pembenaran.
+    - He speak about some famous poets and expects you to understand
     rejectLines:
-    - Ia mendengus jijik mendengar analisa sok tahumu.
+    - He is unimpressed with the audience lack of intelect, he fully expects you
+      to be the same
   - approach: 2
     likeLines:
-    - Ia menatap gerak-gerikmu dengan takjub, seolah melihat koreografi yang terencana.
+    - he challenge you on writing a poet!
     rejectLines:
-    - Ia merasa tidak dihargai oleh gerakan fisikmu yang dianggap lancang.
+    - He wanted you to hear his words and not move an inch
   - approach: 3
     likeLines:
-    - Ia menghela napas panjang penuh kekaguman, seakan baru membaca bait sunyi yang
-      agung.
+    - when you talk, he read his poet louder
     rejectLines:
-    - Ia menepis udara dengan tangan, merasa dilecehkan oleh sikap bungkammu.
+    - the lack of feedback sours him
   approachReactions:
   - approach: 0
     veryLikeLines:

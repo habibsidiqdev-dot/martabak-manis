@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Bartender (Lara)
   maxTurns: 5
-  targetResonance: 10
-  clueChance: 1
+  targetResonance: 6
+  clueChance: 0.35
   moodPool:
   - mood: 0
     min: 3
     max: 3
   - mood: 1
-    min: 1
+    min: 2
     max: 2
   - mood: 2
     min: 0
@@ -49,24 +49,27 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - Ia menyeringai lebar dengan sorot mata tajam penuh pengakuan.
+    - The mixer is being thrown gracefully, with her face smiling, waiting for a
+      compliment from a keen eye
     rejectLines:
-    - Sang bartender mendengus, tidak terkesan dengan gaya matamu.
+    - she is brewing quite an unsual drink for herself, she would rather not for
+      you to notice that weird concoction
   - approach: 1
     likeLines:
-    - Ia mengangguk mantap sambil menyilangkan tangan di depan dada.
+    - She ask you about the this and that about drinks, she had a feeling you might
+      know
     rejectLines:
-    - Ia mengernyit, kebingungan dengan istilah rumit yang kau lontarkan.
+    - The things you know about the bar industry doesn't really entertain her
   - approach: 2
     likeLines:
-    - Ia menyukai kecepatan tanggap dan aksi nyata yang kau tunjukkan.
+    - She hands you her mixer and challenge you to do some tricks
     rejectLines:
-    - "\u201CIa menghela napas panjang melihat caramu bertindak yang gegabah."
+    - Her face doesn't show appreciation to the party tricks done by other patrons
   - approach: 3
     likeLines:
-    - Senyuman puas terlihat dari muka sang bartender
+    - She's hard at work and ask you to wait a while
     rejectLines:
-    - Sang bartender menatapmu heran dengan sebelah alis terangkat.
+    - The bar being very quiet made her very weirded out
   approachReactions:
   - approach: 0
     veryLikeLines:
