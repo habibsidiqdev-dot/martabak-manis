@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3bccd95a20a42a046aa1e13f31d3c612
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Core/HierarchyContextUtil.cs
+  uploadId: 1058616

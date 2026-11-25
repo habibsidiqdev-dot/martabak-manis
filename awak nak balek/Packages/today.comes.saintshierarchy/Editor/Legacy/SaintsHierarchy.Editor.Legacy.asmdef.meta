@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0d037f29ae454ba49ef497f0729af189
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Legacy/SaintsHierarchy.Editor.Legacy.asmdef
+  uploadId: 1058616

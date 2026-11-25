@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 81ea5dce225b1584c8abe1e4cbdf76f2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Samples~/RawResources/PrefabWithFbxInside.prefab
+  uploadId: 1058616

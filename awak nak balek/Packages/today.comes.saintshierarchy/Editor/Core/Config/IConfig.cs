@@ -1,0 +1,43 @@
+using System.Collections.Generic;
+
+namespace SaintsHierarchy.Editor.Core.Config
+{
+    public interface IConfig
+    {
+        // ReSharper disable InconsistentNaming
+        public bool disabled { get; }
+
+        public bool backgroundStrip { get; }
+        public bool indentGuides { get; set; }
+        public bool gameObjectEnabledChecker { get; }
+        public bool gameObjectEnabledCheckerEveryRow { get; }
+        public bool componentIcons { get; }
+        public bool componentIconsForGeneralScripts { get; }
+        public bool componentIconsForTransform { get; }
+        public bool enableLayer { get; }
+        public float layerWidth { get; }
+        public bool enableTag { get; }
+        public float tagWidth { get; }
+        public bool noDefaultIcon { get; }
+        public bool transparentDefaultIcon { get; }
+
+        public List<SceneGuidToGoConfigs> sceneGuidToGoConfigsList { get; }
+
+        public bool disableFavorites { get; set; }
+        public bool FavoriteClickToInspect { get; set; }
+        public bool saveFavoritesToProjectConfig { get; set; }
+        public List<GameObjectFavorite> favorites { get; }
+
+        public bool disableSceneSelector { get; set; }
+        public bool disableSceneFindInProject { get; set; }
+        // ReSharper restore InconsistentNaming
+
+        public bool ReplaceContextMenu { get; set; }
+        public bool DefaultContextMenuIcons { get; set; }
+        public bool SaveContextMenuToProjectConfig { get; set; }
+        public List<ContextPathOverride> ContextPathOverrides { get; }
+        public List<ContextCustomGroup> ContextCustomGroups { get; }
+
+        void SaveToDisk();
+    }
+}

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 97b4ded7cd4379046ba5e0f80cf0001c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/HierarchyUI/FavoriteButton.cs
+  uploadId: 1058616

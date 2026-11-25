@@ -46,6 +46,12 @@ namespace TrustSystem
         [SerializeField] private TMP_Text resonanceLabel;
         [SerializeField] private TMP_Text turnsLabel;
 
+        [Header("Dialogue (deskripsi pembuka + dialogue bisa panjang)")]
+        [Tooltip("Aktif = font dialogue mengecil otomatis (antara Min dan Max) supaya teks panjang muat di kotak.")]
+        [SerializeField] private bool dialogueAutoSize = true;
+        [SerializeField, Min(8f)] private float dialogueMinFontSize = 22f;
+        [SerializeField, Min(8f)] private float dialogueMaxFontSize = 34f;
+
         [Header("Pilihan (isi 4, urutan = Atas, Kanan, Bawah, Kiri: OBS, KNO, ACT, SIL)")]
         [SerializeField] private ApproachButton[] approachButtons;
 
@@ -114,6 +120,13 @@ namespace TrustSystem
             Canvas canvas = encounterRoot.GetComponentInParent<Canvas>(true);
             _canvas = canvas != null ? canvas.rootCanvas : null;
 
+            dialogueLabel.enableAutoSizing = dialogueAutoSize;
+            if (dialogueAutoSize)
+            {
+                dialogueLabel.fontSizeMin = dialogueMinFontSize;
+                dialogueLabel.fontSizeMax = Mathf.Max(dialogueMinFontSize, dialogueMaxFontSize);
+            }
+
             resultPanel.SetActive(false);
             encounterRoot.SetActive(false);
             _ready = true;
@@ -155,7 +168,25 @@ namespace TrustSystem
 
         public void SetDialogue(string text)
         {
-            if (dialogueLabel != null) dialogueLabel.text = text;
+            if (dialogueLabel == null) return;
+            dialogueLabel.text = text;
+
+#if UNITY_EDITOR
+            // Bantu penulis: kasih tahu kalau teks yang tergambar lebih tinggi dari kotaknya.
+            // Diukur langsung (tinggi teks vs tinggi kotak), bukan lewat isTextOverflowing yang bisa meleset
+            // kalau layout kotak belum dihitung saat dipanggil.
+            if (dialogueLabel.gameObject.activeInHierarchy)
+            {
+                Canvas.ForceUpdateCanvases();
+                dialogueLabel.ForceMeshUpdate();
+                float textHeight = dialogueLabel.textBounds.size.y;
+                float boxHeight = dialogueLabel.rectTransform.rect.height;
+                if (textHeight > boxHeight + 1f)
+                    Debug.LogWarning($"{name}: teks dialogue terlalu panjang untuk kotaknya " +
+                                     $"(tinggi teks {textHeight:0} > kotak {boxHeight:0}, font {dialogueLabel.fontSize:0.#}). " +
+                                     "Pendekkan deskripsi/dialogue NPC, atau tinggikan kotak DialogueBox.", this);
+            }
+#endif
         }
 
         public void SetStatus(int resonance, int target, int turnsLeft)

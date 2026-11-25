@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d4b131d9b4c6bf141b9cd5a94f349415
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Samples~/Scripts/DrawLabelExample.cs
+  uploadId: 1058616

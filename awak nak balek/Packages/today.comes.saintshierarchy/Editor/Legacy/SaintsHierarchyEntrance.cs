@@ -1,0 +1,1761 @@
+#if (WWISE_2024_OR_LATER || WWISE_2023_OR_LATER || WWISE_2022_OR_LATER || WWISE_2021_OR_LATER || WWISE_2020_OR_LATER || WWISE_2019_OR_LATER || WWISE_2018_OR_LATER || WWISE_2017_OR_LATER || WWISE_2016_OR_LATER || SAINTSFIELD_WWISE) && !SAINTSFIELD_WWISE_DISABLE
+#define SAINTSHIERARCHY_WWISE
+#endif
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using SaintsHierarchy.Editor.Core;
+using SaintsHierarchy.Editor.Core.Config;
+using SaintsHierarchy.Editor.Core.Draw;
+using SaintsHierarchy.Editor.Core.Utils;
+using SaintsHierarchy.Editor.Legacy.Draw;
+using SaintsHierarchy.Editor.Legacy.Utils;
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+using UnityEditor.SceneManagement;
+using UnityEditorInternal;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using SceneSelector = SaintsHierarchy.Editor.Core.Utils.SceneSelector;
+using Object = UnityEngine.Object;
+
+namespace SaintsHierarchy.Editor.Legacy
+{
+    public static class SaintsHierarchyEntrance
+    {
+        [InitializeOnLoadMethod]
+        private static void Entrance()
+        {
+            EditorApplication.
+#if UNITY_6000_4_OR_NEWER
+            hierarchyWindowItemByEntityIdOnGUI
+#else
+            hierarchyWindowItemOnGUI
+#endif
+                += OnHierarchyGUI;
+        }
+
+        private const int StartOffset = 60;
+        private const int IndentOffset = 14;
+        private const int LeftStartX = 32;
+        private const int PrefabExpandWidth = 16;
+        private const int RowHeight = 16;
+
+        private static readonly Color TreeColor = new Color(0.4f, 0.4f, 0.4f);
+        private static Texture2D _colorStripTex;
+        private static Texture2D _transparentTex;
+
+        private static void OnHierarchyGUI(
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+            int
+#endif
+                instanceID, Rect selectionRect)
+        {
+            // Debug.Log(selectionRect.y);
+            bool personalDisabled = !PersonalHierarchyConfig.instance.personalEnabled;
+            if (personalDisabled
+                    ? SaintsHierarchyConfig.instance.disabled
+                    : PersonalHierarchyConfig.instance.disabled)
+            {
+                return;
+            }
+
+
+            // Get the object corresponding to the ID
+            Object obj = EditorUtility.
+#if UNITY_6000_3_OR_NEWER
+                EntityIdToObject
+#else
+                InstanceIDToObject
+#endif
+                (instanceID);
+
+            if (obj == null)
+            {
+                if (!Util.GetUsingConfig().disableSceneSelector)
+                {
+                    RenderSceneSelector(instanceID, selectionRect);
+                }
+
+                return;
+            }
+
+            if (obj is not GameObject originGo)
+            {
+                return;
+            }
+
+            // Debug.Log($"insId:  {instanceID} obj: {originGo.name}");
+
+            int rowIndex = Mathf.RoundToInt(selectionRect.y) / RowHeight;
+            Rect fullRect = new Rect(selectionRect)
+            {
+                x = LeftStartX,
+                xMax = selectionRect.xMax + 16,
+            };
+
+            // EditorGUI.DrawRect(fullRect, Color.yellow);
+
+            Vector2 mousePosition = Event.current.mousePosition;
+            bool isHover = fullRect.Contains(mousePosition);
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
+            // if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && isHover)
+            // {
+            //     _selectedInstance = instanceID;
+            // }
+            // else if (Event.current.type == EventType.MouseUp)
+            // {
+            //     _selectedInstance = null;
+            // }
+
+            string curScenePath = originGo.scene.path;
+
+            // null check for TestRunner(In Play Mode) GameObject
+            if (curScenePath == null)
+            {
+                return;
+            }
+
+            // Debug.Log($"popup parent: {string.Join(",", parentRoots)}");
+            // Debug.Log($"popup scene: {curScenePath}");
+            // GameObject targetGo = go;
+            GameObject go = originGo;
+            bool isInsideCurrentPrefabContents = IsInsideCurrentPrefabContents(originGo);
+            bool isPrefabStageContextObject = IsPrefabStageContextObject(originGo);
+            bool notEditable = (originGo.hideFlags & HideFlags.NotEditable) != 0;
+            bool isPrefabAssetSceneObject = curScenePath.EndsWith(".prefab");
+            if (isPrefabAssetSceneObject && isInsideCurrentPrefabContents)
+            {
+                go = Util.GetPrefabSubGameObject(curScenePath, originGo);
+                // Debug.Log($"switch from {originGo.name} to {go?.name}");
+                if (go == null)
+                {
+                    return;
+                }
+            }
+
+            GameObjectConfig goConfig;
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                (bool runtimeFound, GameObjectConfig runtimeConfig) = RuntimeCacheConfig.instance.Search(instanceID);
+                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                if (runtimeFound)
+                {
+                    goConfig = runtimeConfig;
+                }
+                else
+                {
+                    goConfig = Util.GetGameObjectConfig(go).config;
+                }
+            }
+            else
+            {
+                bool found;
+                (found, goConfig) = Util.GetGameObjectConfig(go);
+                if(found)
+                {
+                    RuntimeCacheConfig.instance.Upsert(instanceID, goConfig);
+                }
+            }
+
+            // Debug.Log($"origin: {originGo.name}/go: {go.name}/prefabCtx:{isPrefabStageContextObject}");
+
+            Transform trans = go.transform;
+
+            (string sceneHierarchyError, EditorWindow sceneHierarchyWindow, object sceneHierarchy) = GetSceneHierarchyWindow(selectionRect);
+            if (sceneHierarchyError != "")
+            {
+#if SAINTSHIERARCHY_DEBUG
+                Debug.LogWarning(sceneHierarchyError);
+#endif
+                return;
+            }
+
+            (string bgError, SelectStatus bgStatus) = GetBgColor(sceneHierarchyWindow, sceneHierarchy, instanceID, isHover);
+            if (bgError != "")
+            {
+#if SAINTSHIERARCHY_DEBUG
+                Debug.LogWarning(bgError);
+#endif
+                return;
+            }
+
+            Color bgDefaultColor;
+            switch (bgStatus)
+            {
+                case SelectStatus.Normal:
+                    bgDefaultColor = ColorNormal;
+                    break;
+                case SelectStatus.NormalHover:
+                    bgDefaultColor = ColorHover;
+                    break;
+                case SelectStatus.SelectFocus:
+                    bgDefaultColor = ColorSelectFocus;
+                    break;
+                case SelectStatus.SelectUnfocus:
+                    bgDefaultColor = ColorSelectUnfocus;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bgStatus), bgStatus, null);
+            }
+            EditorGUI.DrawRect(fullRect, bgDefaultColor);
+            if(personalDisabled
+                   ? SaintsHierarchyConfig.instance.backgroundStrip
+                   : PersonalHierarchyConfig.instance.backgroundStrip)
+            {
+                bool needLight = (rowIndex + 1) % 2 == 0;
+                if (needLight)
+                {
+                    EditorGUI.DrawRect(fullRect, ColorStripedLight);
+                }
+            }
+
+            bool hasFoldout = trans.childCount >= 1;
+            bool thisExpand = false;
+            if (hasFoldout)
+            {
+                (string expandedError,
+                    IReadOnlyList<
+#if UNITY_6000_4_OR_NEWER
+                    EntityId
+#else
+                    int
+#endif
+                    > expandedIds) = GetExpandedIds(sceneHierarchy);
+                if (expandedError != "")
+                {
+#if SAINTSHIERARCHY_DEBUG
+                    Debug.LogWarning(expandedError);
+#endif
+                    return;
+                }
+
+                thisExpand = expandedIds.Contains(instanceID);
+                // Debug.Log($"this expanded: {thisExpand}, {go.name}");
+            }
+
+            #region Tree
+
+            int startX = Mathf.RoundToInt(selectionRect.x);
+            int offset = startX - 60;
+            // Debug.Log($"{go.name}: {offset}");
+            int indentLevel = offset / IndentOffset;
+            // Debug.Log($"{indentLevel}: {go.name}");
+            // Debug.Log($"{trans.GetSiblingIndex()}: {go.name}");
+
+
+            // int dontOverlapFoldoutIndent = hasFoldout ? indentLevel - 1 : indentLevel;
+
+            for (int index = 0; Util.GetUsingConfig().indentGuides && index < indentLevel; index++)
+            {
+                int indentX = StartOffset + (index - 1) * IndentOffset;
+                Rect drawIndent = new Rect(selectionRect)
+                {
+                    x = indentX,
+                    width = IndentOffset,
+                };
+
+                DrawIndentDepth(drawIndent, indentLevel - index, trans);
+            }
+
+
+            if (Util.GetUsingConfig().indentGuides && !hasFoldout && indentLevel > 0)
+            {
+                Transform parentTrans = trans.parent;
+                Color useColor = TreeColor;
+                if (parentTrans != null)
+                {
+                    GameObjectConfig config = Util.GetGameObjectConfig(parentTrans.gameObject).config;
+                    if (config.hasColor)
+                    {
+                        useColor = config.color;
+                    }
+                }
+                int indentXLast = StartOffset + (indentLevel - 1) * IndentOffset;
+                Rect drawIndent = new Rect(selectionRect)
+                {
+                    x = indentXLast,
+                    width = IndentOffset,
+                };
+                // GUI.Label(drawIndent, "─");
+                DrawRightThrough(drawIndent, useColor);
+            }
+            #endregion
+
+            #region Foldout
+
+            if (hasFoldout)
+            {
+                Rect foldoutRect = new Rect(fullRect)
+                {
+                    x = selectionRect.x - IndentOffset,
+                    width = IndentOffset,
+                };
+                // EditorGUI.DrawRect(foldoutRect, Color.red);
+                EditorGUI.Foldout(foldoutRect, thisExpand, GUIContent.none);
+            }
+
+            #endregion
+
+            GUIStyle textColorStyle = EditorStyles.label;
+
+            Component[] allComponents = trans.GetComponents<Component>();
+            Texture2D goIcon = EditorGUIUtility.GetIconForObject(originGo);
+            if (goIcon == null)
+            {
+                goIcon = EditorGUIUtility.GetIconForObject(go);
+            }
+
+            #region Main Icon
+
+            // string customIcon = null;
+            Texture iconTexture;
+            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            if (!string.IsNullOrEmpty(goConfig.icon))
+            {
+                iconTexture = Util.LoadResource<Texture2D>(goConfig.icon);
+                // customIcon = goConfig.icon;
+            }
+            else if (goIcon != null && !goIcon.name.StartsWith("sv_label_"))
+            {
+                iconTexture = goIcon;
+            }
+            else
+            {
+                iconTexture = Util.GetIconByComponent(allComponents);
+            }
+
+            Util.PrefabIconInfo prefabInfo = Util.GetPrefabIconInfo(originGo);
+            bool isAnyPrefabInstanceRoot = prefabInfo.IsInstanceRoot;
+            bool isMissingPrefab = prefabInfo.IsMissingPrefab;
+            bool isModelPrefab = prefabInfo.IsModelPrefab;
+            Texture2D prefabTexture = prefabInfo.Icon;
+            if(isAnyPrefabInstanceRoot)
+            {
+                textColorStyle = GetLabelStylePrefab();
+                if (isMissingPrefab)
+                {
+                    textColorStyle = GetLabelStyleMissingPrefab();
+                    iconTexture = EditorGUIUtility.IconContent("d_Prefab Icon").image;
+                }
+            }
+            else if(PrefabUtility.IsPartOfAnyPrefab(originGo))
+            {
+                textColorStyle = GetLabelStylePrefab();
+            }
+
+            bool noDefaultIcon = personalDisabled? SaintsHierarchyConfig.instance.noDefaultIcon: PersonalHierarchyConfig.instance.noDefaultIcon;
+            bool transparentDefaultIcon = personalDisabled? SaintsHierarchyConfig.instance.transparentDefaultIcon: PersonalHierarchyConfig.instance.transparentDefaultIcon;
+            bool noIconTextureAtAll = iconTexture == null;
+            if (noIconTextureAtAll && !noDefaultIcon && transparentDefaultIcon)
+            {
+                iconTexture = _transparentTex ??= Util.LoadResource<Texture2D>("transparent.png");
+            }
+
+            // plus icon for added object inside prefab instance
+            bool isAddedGameObjectOverride = PrefabUtility.IsAddedGameObjectOverride(go);
+
+            Rect iconRect = new Rect(selectionRect)
+            {
+                width = !isAddedGameObjectOverride
+                        && noDefaultIcon
+                        && (noIconTextureAtAll && prefabTexture == null)
+                    ? 0
+                    : IndentOffset,
+            };
+
+            #endregion
+
+            #region Label
+
+            const int labelXOffset = 3;
+            Rect rawRightRect = new Rect(selectionRect)
+            {
+                x = iconRect.xMax + labelXOffset,
+                width = selectionRect.xMax - iconRect.xMax - labelXOffset,
+            };
+
+            GUIContent content = new GUIContent(trans.name);
+            float labelWidth = textColorStyle.CalcSize(content).x;
+
+            bool underlineDraw = false;
+            Color underlineColor = default;
+            Rect underlineRect = default;
+            if (goIcon != null && goIcon.name.StartsWith("sv_label_"))
+            {
+                (underlineDraw, underlineColor) = Util.GetUnderline(goIcon.name);
+
+                underlineRect = new Rect(rawRightRect)
+                {
+                    y = rawRightRect.yMax - 1,
+                    height = 1,
+                    // width = labelWidth,
+                };
+
+                // GUI.DrawTexture(new Rect(labelRect)
+                // {
+                //     width = labelWidth,
+                // },goIcon, ScaleMode.StretchToFill, true);
+
+                // GUIStyle style = new GUIStyle();
+                // style.normal.background = goIcon;
+                // const int border = 6;
+                // style.border = new RectOffset(border, border, border, border); // left, right, top, bottom
+                //
+                // GUI.Box(new Rect(labelRect)
+                // {
+                //     x = labelRect.x - 4,
+                //     y = labelRect.y - 1,
+                //     width = labelWidth + 8,
+                //     height = labelRect.height + 2,
+                // }, GUIContent.none, style);
+            }
+
+            #endregion
+
+            #region Right Space
+
+            Rect rightRect = new Rect(selectionRect)
+            {
+                x = rawRightRect.x + labelWidth,
+                xMax = selectionRect.xMax,
+            };
+            // EditorGUI.DrawRect(rightRect, Color.blueViolet);
+            IConfig usingConfig = Util.GetUsingConfig();
+            bool gameObjectEnabledChecker = usingConfig.gameObjectEnabledChecker;
+            bool gameObjectEnabledCheckerEveryRow = usingConfig.gameObjectEnabledCheckerEveryRow;
+            bool componentIcons = usingConfig.componentIcons;
+            bool componentIconsForGeneralScripts = usingConfig.componentIconsForGeneralScripts;
+            bool componentIconsForTransform = usingConfig.componentIconsForTransform;
+
+            // Reserve the far-right columns before the enabled checker, icons, and custom decorations.
+            rightRect = DrawLayerTagPickers(rightRect, originGo, usingConfig, sceneHierarchyWindow,
+                sceneHierarchy, isPrefabStageContextObject || notEditable);
+
+            DrawRect(
+                gameObjectEnabledChecker,
+                gameObjectEnabledCheckerEveryRow,
+                componentIcons,
+                componentIconsForGeneralScripts,
+                componentIconsForTransform,
+                originGo,
+                allComponents,
+                new Rect(rawRightRect)
+                {
+                    width = labelWidth,
+                },
+                rightRect);
+
+            #endregion
+
+            #region late draw
+
+            #region icon
+            EditorGUI.DrawRect(iconRect, bgDefaultColor);
+            if(Util.GetUsingConfig().backgroundStrip )
+            {
+                bool needLight = (rowIndex + 1) % 2 == 0;
+                if (needLight)
+                {
+                    EditorGUI.DrawRect(iconRect, ColorStripedLight);
+                }
+            }
+            if (iconTexture == null)
+            {
+                // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
+                if (prefabTexture is null)
+                {
+                    bool drawDefaultIcon = !noDefaultIcon || isAddedGameObjectOverride;
+                    if(drawDefaultIcon)
+                    {
+                        GUI.DrawTexture(iconRect, EditorGUIUtility.IconContent("d_GameObject Icon").image,
+                            ScaleMode.ScaleToFit, true);
+                    }
+                }
+                else
+                {
+                    GUI.DrawTexture(iconRect, prefabTexture, ScaleMode.ScaleToFit, true);
+                }
+
+                if (isAddedGameObjectOverride)
+                {
+                    GUI.DrawTexture(iconRect, EditorGUIUtility.IconContent("d_PrefabOverlayAdded Icon").image,
+                        ScaleMode.ScaleToFit, true);
+                }
+            }
+            else
+            {
+                GUI.DrawTexture(iconRect, iconTexture, ScaleMode.ScaleToFit, true);
+
+                if (prefabTexture is not null)
+                {
+                    if (noIconTextureAtAll)
+                    {
+                        GUI.DrawTexture(iconRect, prefabTexture, ScaleMode.ScaleToFit, true);
+                    }
+                    else
+                    {
+                        const float scale = 0.7f;
+                        Rect footerIconRect = new Rect(iconRect.x + iconRect.width * (1 - scale) + 5, iconRect.y +
+                            iconRect.height *
+                            (1 - scale),
+                            iconRect.width * scale, iconRect.height * scale);
+                        if (isAddedGameObjectOverride)
+                        {
+                            footerIconRect.x = iconRect.x + 1;
+                            footerIconRect.y -= 1;
+                        }
+
+                        GUI.DrawTexture(footerIconRect, prefabTexture, ScaleMode.ScaleToFit, true);
+                    }
+                }
+
+                if (isAddedGameObjectOverride)
+                {
+                    GUI.DrawTexture(iconRect, EditorGUIUtility.IconContent("d_PrefabOverlayAdded Icon").image,
+                        ScaleMode.ScaleToFit, true);
+                }
+            }
+            #endregion
+
+            #region label
+            Rect labelRect = new Rect(rawRightRect)
+            {
+                width = labelWidth,
+            };
+            EditorGUI.DrawRect(labelRect, bgDefaultColor);
+            if(Util.GetUsingConfig().backgroundStrip)
+            {
+                bool needLight = (rowIndex + 1) % 2 == 0;
+                if (needLight)
+                {
+                    EditorGUI.DrawRect(labelRect, ColorStripedLight);
+                }
+            }
+            if (goConfig.hasColor)
+            {
+                _colorStripTex ??= Util.LoadResource<Texture2D>("color-strip.psd");
+                using(new GUIColorScoop(goConfig.color))
+                {
+                    GUI.DrawTexture(fullRect, _colorStripTex, ScaleMode.StretchToFill, true);
+                }
+            }
+            EditorGUI.LabelField(rawRightRect, content, textColorStyle);
+            #endregion
+
+            #region label underline
+
+            if (underlineDraw)
+            {
+                EditorGUI.DrawRect(new Rect(underlineRect)
+                {
+                    y = rawRightRect.yMax - 1,
+                    height = 1,
+                    width = labelWidth,
+                }, underlineColor);
+            }
+
+            #endregion
+
+            #endregion
+
+            #region disabled
+
+            if (isPrefabStageContextObject || notEditable || !ActiveInAnyHierarchy(go))
+            {
+                // if (goConfig.hasColor)
+                // {
+                //     // cover the alpha, to override Unity's default drawing
+                //     // EditorGUI.DrawRect(fullRect, bgDefaultColor);
+                //     // EditorGUI.DrawRect(fullRect, new Color(bgDefaultColor.r));
+                // }
+                EditorGUI.DrawRect(fullRect, new Color(bgDefaultColor.r, bgDefaultColor.g, bgDefaultColor.b, 0.5f));
+            }
+
+            #endregion
+
+            #region Prefab Expand
+
+            if (isAnyPrefabInstanceRoot && !isMissingPrefab && !isModelPrefab)
+            {
+                Rect rightExpandRect = new Rect(selectionRect)
+                {
+                    x = selectionRect.xMax,
+                    width = PrefabExpandWidth,
+                };
+                if (rightExpandRect.Contains(mousePosition))
+                {
+                    EditorGUI.DrawRect(rightExpandRect, new Color(1, 1, 1, 0.1f));
+                }
+
+                GUI.DrawTexture(rightExpandRect, EditorGUIUtility.IconContent("ArrowNavigationRight").image, ScaleMode.ScaleToFit, true);
+            }
+
+            #endregion
+
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && isHover && (Event.current.modifiers & EventModifiers.Alt) != 0)
+            {
+                // Debug.Log($"popup id: {GlobalObjectId.GetGlobalObjectIdSlow(go)}");
+                // var parentRoots = GetPrefabRootTopToBottom(go);
+
+                Util.PopupConfig(new Rect(mousePosition.x, mousePosition.y, 0, 0), go, goConfig);
+            }
+        }
+
+        private static Rect DrawLayerTagPickers(Rect rightRect, GameObject go, IConfig config,
+            EditorWindow window, object sceneHierarchy, bool readOnly)
+        {
+            using (new EditorGUI.DisabledScope(readOnly))
+            {
+                // Allocate right to left, leaving Layer followed by Tag in display order.
+                if (config.enableTag)
+                {
+                    Rect rect;
+                    (rect, rightRect) = ReservePickerRect(rightRect, config.tagWidth);
+                    string tag = go.tag;
+                    if (rect.width > 0 && EditorGUI.DropdownButton(rect, new GUIContent(tag, tag),
+                            FocusType.Keyboard, EditorStyles.popup))
+                    {
+                        GameObject[] targets = GetPickerTargets(go, sceneHierarchy);
+                        GenericMenu menu = new GenericMenu();
+                        foreach (string value in InternalEditorUtility.tags)
+                        {
+                            menu.AddItem(new GUIContent(value), value == tag, () => ApplyTag(targets, value));
+                        }
+                        menu.AddSeparator("");
+                        menu.AddItem(new GUIContent("Add Tag..."), false, Util.OpenTagManager);
+                        string escapedTag = tag.Replace("\\", "\\\\").Replace("\"", "\\\"");
+                        menu.AddItem(new GUIContent($"Search \"{tag}\""), false,
+                            () => SetPickerSearch(window, $"tag=\"{escapedTag}\""));
+                        menu.DropDown(rect);
+                    }
+                }
+
+                if (config.enableLayer)
+                {
+                    Rect rect;
+                    (rect, rightRect) = ReservePickerRect(rightRect, config.layerWidth);
+                    int layer = go.layer;
+                    string layerName = InternalEditorUtility.GetLayerName(layer);
+                    if (rect.width > 0 && EditorGUI.DropdownButton(rect, new GUIContent(layerName, layerName),
+                            FocusType.Keyboard, EditorStyles.popup))
+                    {
+                        GameObject[] targets = GetPickerTargets(go, sceneHierarchy);
+                        GenericMenu menu = new GenericMenu();
+                        for (int value = 0; value < 32; value++)
+                        {
+                            string name = InternalEditorUtility.GetLayerName(value);
+                            if (name.Length == 0)
+                            {
+                                continue;
+                            }
+                            int targetLayer = value;
+                            menu.AddItem(new GUIContent(name), value == layer, () => ApplyLayer(targets, targetLayer));
+                        }
+                        menu.AddSeparator("");
+                        menu.AddItem(new GUIContent("Add Layer..."), false, Util.OpenTagManager);
+                        menu.AddItem(new GUIContent($"Search \"{layerName}\""), false,
+                            () => SetPickerSearch(window, $"layer={layer}"));
+                        menu.DropDown(rect);
+                    }
+                }
+            }
+            return rightRect;
+        }
+
+        private static (Rect pickerRect, Rect remainingRect) ReservePickerRect(Rect available, float width)
+        {
+            float useWidth = Mathf.Min(Mathf.Max(1f, width), Mathf.Max(0f, available.width));
+            Rect rect = new Rect(available.xMax - useWidth, available.y, useWidth, available.height);
+            available.xMax = rect.x;
+            return (rect, available);
+        }
+
+        private static GameObject[] GetPickerTargets(GameObject go, object sceneHierarchy)
+        {
+            var (error, selectedIds) = GetSelectedIds(sceneHierarchy);
+            if (error != "" || !selectedIds.Contains(go.
+#if UNITY_6000_4_OR_NEWER
+                    GetEntityId
+#else
+                    GetInstanceID
+#endif
+                    ()))
+            {
+                return new[] { go };
+            }
+
+            return selectedIds.Select(id => EditorUtility.
+#if UNITY_6000_3_OR_NEWER
+                    EntityIdToObject
+#else
+                    InstanceIDToObject
+#endif
+                    (id) as GameObject)
+                .Where(target => target != null && (target.hideFlags & HideFlags.NotEditable) == 0
+                    && !IsPrefabStageContextObject(target))
+                .ToArray();
+        }
+
+        private static void ApplyTag(GameObject[] targets, string tag)
+        {
+            targets = targets.Where(target => target != null && (target.hideFlags & HideFlags.NotEditable) == 0
+                && !IsPrefabStageContextObject(target) && !target.CompareTag(tag)).ToArray();
+            if (targets.Length == 0)
+            {
+                return;
+            }
+
+            foreach (GameObject target in targets)
+            {
+                using SerializedObject serialized = new SerializedObject(target);
+                serialized.FindProperty("m_TagString").stringValue = tag;
+                serialized.ApplyModifiedProperties();
+            }
+
+            EditorApplication.RepaintHierarchyWindow();
+        }
+
+        private static void ApplyLayer(GameObject[] targets, int layer)
+        {
+            targets = targets.Where(target => target != null && (target.hideFlags & HideFlags.NotEditable) == 0
+                && !IsPrefabStageContextObject(target)).ToArray();
+            if (targets.Length == 0)
+            {
+                return;
+            }
+
+            if (targets.Any(target => target.transform.childCount > 0))
+            {
+                int choice = EditorUtility.DisplayDialogComplex("Change Layer",
+                    $"Do you want to set layer to {InternalEditorUtility.GetLayerName(layer)} for all child objects as well?",
+                    "Yes, change children", "No, this object only", "Cancel");
+                if (choice == 2)
+                {
+                    return;
+                }
+                if (choice == 0)
+                {
+                    targets = targets.SelectMany(target => target.GetComponentsInChildren<Transform>(true))
+                        .Select(transform => transform.gameObject)
+                        .Where(target => (target.hideFlags & HideFlags.NotEditable) == 0
+                            && !IsPrefabStageContextObject(target))
+                        .Distinct().ToArray();
+                }
+            }
+
+            foreach (GameObject target in targets)
+            {
+                using SerializedObject serialized = new SerializedObject(target);
+                serialized.FindProperty("m_Layer").intValue = layer;
+                serialized.ApplyModifiedProperties();
+            }
+
+            EditorApplication.RepaintHierarchyWindow();
+        }
+
+        private static void SetPickerSearch(EditorWindow window, string search)
+        {
+            if (window == null)
+            {
+                return;
+            }
+
+            UnityEditor.Search.SearchService.ShowWindow(
+                UnityEditor.Search.SearchService.CreateContext("scene", search),
+                saveFilters: false, reuseExisting: true);
+        }
+
+        private static string _mouseDownSceneSelectorStringId;
+        private static Vector2 _mouseDownSceneSelectorMousePosition = Vector2.zero;
+        private static bool _sceneSelectorOpen;
+
+        private static void RenderSceneSelector(
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+            int
+#endif
+            instanceID, Rect selectionRect)
+        {
+            Scene activeScene = SceneManager.GetActiveScene();
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (!scene.isLoaded)
+                {
+                    continue;
+                }
+
+                string sceneStringId = $"{scene.handle}";
+
+                // ReSharper disable once InvertIf
+                if (sceneStringId == $"{instanceID}")
+                {
+                    bool active = activeScene == scene;
+                    string sceneName = scene.name == "" ? "Untitled" : scene.name;
+                    // Debug.Log($"{sceneName}/{active}");
+
+                    float nameWidth;
+                    using(new BoldLabelScoop(active))
+                    {
+                        nameWidth = GUI.skin.label.CalcSize(new GUIContent(sceneName)).x;
+                    }
+                    int dirtyWidth = scene.isDirty ? 5 : 0;
+
+                    float totalWidth = nameWidth + dirtyWidth + 5;
+
+                    const float labelStart = LeftStartX + IndentOffset * 2;
+                    float dropdownWidth = selectionRect.height;
+
+                    Rect detectRect = new Rect(selectionRect)
+                    {
+                        x = labelStart,
+                        width = totalWidth + dropdownWidth,
+                    };
+
+                    // EditorGUI.DrawRect(detectRect, Color.blue * new Color(1, 1, 1, 0.3f));
+
+                    Rect dropdownIconRect = new Rect(selectionRect)
+                    {
+                        x = detectRect.xMax - dropdownWidth,
+                        width = dropdownWidth,
+                    };
+
+                    // EditorGUI.DrawRect(dropdownIconRect, Color.red * new Color(1, 1, 1, 0.5f));
+                    GUIContent content = EditorGUIUtility.IconContent("d_icon dropdown");
+                    EditorGUI.LabelField(dropdownIconRect, content);
+
+                    // mouse
+                    if (Event.current.button == 0 && Event.current.type == EventType.MouseDown && detectRect.Contains(Event.current.mousePosition))
+                    {
+                        _mouseDownSceneSelectorStringId = sceneStringId;
+                        _mouseDownSceneSelectorMousePosition = Event.current.mousePosition;
+                        _sceneSelectorOpen = false;
+                    }
+                    else if (Event.current.type == EventType.MouseDrag)
+                    {
+                        if (_sceneSelectorOpen)
+                        {
+                            Event.current.Use();
+                        }
+                        else if (_mouseDownSceneSelectorStringId == sceneStringId)
+                        {
+                            if (Vector2.SqrMagnitude(_mouseDownSceneSelectorMousePosition -
+                                                     Event.current.mousePosition) > 3 * 3)
+                            {
+                                _mouseDownSceneSelectorStringId = null;
+                            }
+                        }
+                    }
+                    else if (Event.current.type == EventType.MouseUp)
+                    {
+                        if (_mouseDownSceneSelectorStringId == sceneStringId && detectRect.Contains(Event.current.mousePosition))
+                        {
+                            // Debug.Log($"Clicked {sceneStringId}");
+
+                            Rect useBound = new Rect(selectionRect)
+                            {
+                                x = detectRect.x,
+                                width = selectionRect.width - detectRect.x,
+                            };
+                            _sceneSelectorOpen = true;
+                            SceneSelector.Show(scene, useBound, () =>
+                            {
+                                _sceneSelectorOpen = false;
+                                Event.current?.Use();
+                            });
+                            Event.current.Use();
+
+#if SAINTSHIERARCHY_DEBUG && SAINTSHIERARCHY_DEBUG_SCENE_SELECTOR
+                            Debug.Log("done dropdown show");
+#endif
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool ActiveInAnyHierarchy(GameObject go)
+        {
+            bool isInPrefabMode =
+                PrefabStageUtility.GetCurrentPrefabStage() != null;
+            if (!isInPrefabMode)
+            {
+                return go.activeInHierarchy;
+            }
+
+            Transform t = go.transform;
+            // Transform prefabRoot = stage.prefabContentsRoot.transform;
+
+            while (t != null)
+            {
+                if (!t.gameObject.activeSelf)
+                    return false;
+
+                // if (t == prefabRoot)
+                //     break;
+
+                t = t.parent;
+            }
+
+            return true;
+        }
+
+        private static Texture2D _closePng;
+
+        private static bool AnyParentDisabled(GameObject go)
+        {
+            Transform parent = go.transform.parent;
+            while (parent != null)
+            {
+                if (!parent.gameObject.activeSelf)
+                {
+                    return true;
+                }
+                parent = parent.parent;
+            }
+
+            return false;
+        }
+
+        private static void DrawRect(bool gameObjectEnabledChecker, bool gameObjectEnabledCheckerEveryRow,
+            bool componentIcons, bool componentIconsForGeneralScripts, bool componentIconsForTransform,
+            GameObject originGo, Component[] allComponents, Rect labelRect, Rect rightRect)
+        {
+            HierarchyButtonDrawer.Update();
+
+            float leftXLimit = rightRect.x;
+
+            Rect useRect = new Rect(rightRect);
+            if (gameObjectEnabledChecker && (gameObjectEnabledCheckerEveryRow || AnyParentDisabled(originGo)))
+            {
+                useRect.xMax -= 18;
+                Rect checkerRect = new Rect(useRect.xMax + 2,  useRect.y, 16, useRect.height);
+                using EditorGUI.ChangeCheckScope changeCheckScope = new EditorGUI.ChangeCheckScope();
+                bool goEnable = EditorGUI.Toggle(checkerRect, originGo.activeSelf);
+                GUI.Label(checkerRect, new GUIContent(string.Empty,
+                    $"{(originGo.activeSelf? "Inactive": "Active")} {originGo.name}"), GUIStyle.none);
+                if (changeCheckScope.changed)
+                {
+                    originGo.SetActive(goEnable);
+                }
+            }
+
+            if (componentIcons)
+            {
+                // rectTransform always at end
+                List<(Component component, bool canToggle, Texture2D icon)> componentAndIcon = Util.GetSortedComponentIcons(
+                        allComponents, componentIconsForGeneralScripts, componentIconsForTransform)
+                    .Select(each => (each.component, each.component is Behaviour, each.icon))
+                    .ToList();
+
+                if (componentAndIcon.Count > 0)
+                {
+                    float startX = useRect.xMax -= RowHeight * componentAndIcon.Count;
+                    for (int index = 0; index < componentAndIcon.Count; index++)
+                    {
+                        (Component component, bool canToggle, Texture2D icon) compInfo = componentAndIcon[index];
+                        float x = startX + index * RowHeight;
+                        if (x < leftXLimit)
+                        {
+                            continue;
+                        }
+                        Rect iconRect = new Rect(x, useRect.y, RowHeight, RowHeight);
+                        // GUIContent iconContent = new GUIContent(compInfo.icon);
+                        // EditorStyles.iconButton.Draw(iconRect, iconContent, iconRect.Contains(Event.current.mousePosition), false, false, false);
+                        using (new GUIColorScoop(IsDisabledBehaviour(compInfo.component) ? new Color(1f, 1f, 1f, 0.35f) : Color.white))
+                        {
+                            GUI.DrawTexture(iconRect, compInfo.icon, ScaleMode.ScaleToFit, true);
+                        }
+                        GUI.Label(iconRect, new GUIContent(string.Empty,
+                            ObjectNames.NicifyVariableName(compInfo.component.GetType().Name)), GUIStyle.none);
+
+                        // ReSharper disable once InvertIf
+                        if (Event.current.type == EventType.MouseDown
+                            && Event.current.button == 0
+                            && Event.current.alt
+                            && iconRect.Contains(Event.current.mousePosition))
+                        {
+                            ComponentPropertiesPopup.Show(compInfo.component, iconRect);
+                            Event.current.Use();
+                        }
+                        // if (compInfo.canToggle)
+                        // {
+                        //     Behaviour behavior = (Behaviour)compInfo.component;
+                        //     if (GUI.Button(iconRect, new GUIContent(compInfo.icon), EditorStyles.iconButton))
+                        //     {
+                        //         behavior.enabled = !behavior.enabled;
+                        //     }
+                        //
+                        //     if (!behavior.enabled)
+                        //     {
+                        //         const float rectScale = 0.7f;
+                        //         Rect sideNote = new Rect(iconRect.x + iconRect.width * (1 - rectScale), iconRect.y + iconRect.height * (1 - rectScale),
+                        //             iconRect.width * rectScale, iconRect.height * rectScale);
+                        //         // Rect sideNote = iconRect;
+                        //         using (new GUIColorScoop(Color.black))
+                        //         {
+                        //             GUI.DrawTexture(sideNote, _closePng ?? Util.LoadResource<Texture2D>("close.png"), ScaleMode.StretchToFill, true);
+                        //         }
+                        //     }
+                        //
+                        // }
+                        // else
+                        // {
+                        //     GUI.DrawTexture(iconRect, compInfo.icon,
+                        //         ScaleMode.ScaleToFit, true);
+                        // }
+                    }
+                }
+            }
+
+            float xLeft = useRect.x;
+            float xRight = useRect.xMax;
+
+            HierarchyArea hierarchyArea = new HierarchyArea(
+                useRect.y,
+                useRect.height,
+                labelRect.x, labelRect.xMax,
+                useRect.x, useRect.xMax,
+                useRect.x, Array.Empty<Rect>());
+
+            string preLeftGroupBy = null;
+            List<Rect> preLeftUsedRects = new List<Rect>();
+            string preRightGroupBy = null;
+            List<Rect> preRightUsedRects = new List<Rect>();
+
+            foreach (Component component in allComponents)
+            {
+                foreach (RenderTargetInfo renderTargetInfo in Util.GetRenderTargetInfos(component).OrderBy(each => !each.Attribute.IsLeft))
+                {
+                    switch (renderTargetInfo.Attribute)
+                    {
+                        case HierarchyButtonAttribute hierarchyButtonAttribute:
+                        {
+                            if (hierarchyButtonAttribute.IsLeft)
+                            {
+                                preLeftGroupBy = null;
+                                if(preLeftUsedRects.Count > 0)
+                                {
+                                    xLeft = Mathf.Max(xLeft, preLeftUsedRects.Max(each => each.xMax));
+                                    preLeftUsedRects.Clear();
+                                }
+                            }
+                            else
+                            {
+                                preRightGroupBy = null;
+                                if(preRightUsedRects.Count > 0)
+                                {
+                                    xRight = Mathf.Min(xRight, preRightUsedRects.Min(each => each.x));
+                                    preRightUsedRects.Clear();
+                                }
+                            }
+
+                            if (hierarchyButtonAttribute.IsLeft)
+                            {
+                                if (xLeft >= xRight)
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (xRight <= xLeft)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            float x = hierarchyButtonAttribute.IsLeft ? xLeft : xRight;
+                            (bool buttonUsed, HierarchyUsed buttonHeaderUsed) = HierarchyButtonDrawer.Draw(
+                                component,
+                                hierarchyArea.EditorWrap(x, Array.Empty<Rect>()),
+                                hierarchyButtonAttribute,
+                                renderTargetInfo
+                            );
+                            if (buttonUsed)
+                            {
+                                if (hierarchyButtonAttribute.IsLeft)
+                                {
+                                    xLeft = buttonHeaderUsed.UsedRect.xMax;
+
+                                }
+                                else
+                                {
+                                    xRight = buttonHeaderUsed.UsedRect.x;
+
+                                }
+                            }
+
+                            break;
+                        }
+                        case HierarchyDrawAttribute hierarchyDrawAttribute:
+                        {
+                            string groupBy = hierarchyDrawAttribute.GroupBy;
+                            IReadOnlyList<Rect> usedRects = Array.Empty<Rect>();
+                            if (!string.IsNullOrEmpty(groupBy))
+                            {
+                                // get used rect
+                                usedRects = hierarchyDrawAttribute.IsLeft ? preLeftUsedRects : preRightUsedRects;
+
+                                // check if it's new group
+                                if (hierarchyDrawAttribute.IsLeft)
+                                {
+                                    if (preLeftGroupBy != hierarchyDrawAttribute.GroupBy && preLeftUsedRects.Count > 0)
+                                    {
+                                        preLeftGroupBy = hierarchyDrawAttribute.GroupBy;
+                                        xLeft = Mathf.Max(xLeft, preLeftUsedRects.Max(each => each.xMax));
+                                        preLeftUsedRects.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    if (preRightGroupBy != hierarchyDrawAttribute.GroupBy && preRightUsedRects.Count > 0)
+                                    {
+                                        preRightGroupBy = hierarchyDrawAttribute.GroupBy;
+                                        xRight = Mathf.Min(xRight, preRightUsedRects.Min(each => each.x));
+                                        preRightUsedRects.Clear();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (hierarchyDrawAttribute.IsLeft)
+                                {
+                                    preLeftGroupBy = null;
+                                    if(preLeftUsedRects.Count > 0)
+                                    {
+                                        xLeft = Mathf.Max(xLeft, preLeftUsedRects.Max(each => each.xMax));
+                                        preLeftUsedRects.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    preRightGroupBy = null;
+                                    if(preRightUsedRects.Count > 0)
+                                    {
+                                        xRight = Mathf.Min(xRight, preRightUsedRects.Min(each => each.x));
+                                        preRightUsedRects.Clear();
+                                    }
+                                }
+                            }
+
+                            if (hierarchyDrawAttribute.IsLeft)
+                            {
+                                if (xLeft >= xRight)
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (xRight <= xLeft)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            (bool used, HierarchyUsed headerUsed) = HierarchyDrawDrawer.Draw(
+                                component,
+                                hierarchyArea.EditorWrap(hierarchyDrawAttribute.IsLeft ? xLeft : xRight, usedRects),
+                                renderTargetInfo
+                            );
+
+                            if (used)
+                            {
+                                if (string.IsNullOrEmpty(groupBy))
+                                {
+                                    if (hierarchyDrawAttribute.IsLeft)
+                                    {
+                                        xLeft = headerUsed.UsedRect.xMax;
+                                    }
+                                    else
+                                    {
+                                        xRight = headerUsed.UsedRect.x;
+                                    }
+                                }
+                                else
+                                {
+                                    if (hierarchyDrawAttribute.IsLeft)
+                                    {
+                                        preLeftUsedRects.Add(headerUsed.UsedRect);
+                                        preLeftGroupBy = hierarchyDrawAttribute.GroupBy;
+                                    }
+                                    else
+                                    {
+                                        preRightUsedRects.Add(headerUsed.UsedRect);
+                                        preRightGroupBy = hierarchyDrawAttribute.GroupBy;
+                                    }
+                                }
+                            }
+                        }
+                            break;
+                        case HierarchyLabelAttribute hierarchyLabelAttribute:
+                        {
+                            string groupBy = hierarchyLabelAttribute.GroupBy;
+                            IReadOnlyList<Rect> usedRects = Array.Empty<Rect>();
+                            if (!string.IsNullOrEmpty(groupBy))
+                            {
+                                // get used rect
+                                usedRects = hierarchyLabelAttribute.IsLeft ? preLeftUsedRects : preRightUsedRects;
+
+                                // check if it's new group
+                                if (hierarchyLabelAttribute.IsLeft)
+                                {
+                                    if (preLeftGroupBy != hierarchyLabelAttribute.GroupBy && preLeftUsedRects.Count > 0)
+                                    {
+                                        preLeftGroupBy = hierarchyLabelAttribute.GroupBy;
+                                        xLeft = Mathf.Max(xLeft, preLeftUsedRects.Max(each => each.xMax));
+                                        preLeftUsedRects.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    if (preRightGroupBy != hierarchyLabelAttribute.GroupBy && preRightUsedRects.Count > 0)
+                                    {
+                                        preRightGroupBy = hierarchyLabelAttribute.GroupBy;
+                                        xRight = Mathf.Min(xRight, preRightUsedRects.Min(each => each.x));
+                                        preRightUsedRects.Clear();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (hierarchyLabelAttribute.IsLeft)
+                                {
+                                    preLeftGroupBy = null;
+                                    if(preLeftUsedRects.Count > 0)
+                                    {
+                                        xLeft = Mathf.Max(xLeft, preLeftUsedRects.Max(each => each.xMax));
+                                        preLeftUsedRects.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    preRightGroupBy = null;
+                                    if(preRightUsedRects.Count > 0)
+                                    {
+                                        xRight = Mathf.Min(xRight, preRightUsedRects.Min(each => each.x));
+                                        preRightUsedRects.Clear();
+                                    }
+                                }
+                            }
+
+                            if (hierarchyLabelAttribute.IsLeft)
+                            {
+                                if (xLeft >= xRight)
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (xRight <= xLeft)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            (bool used, HierarchyUsed headerUsed) = HierarchyLabelDrawer.Draw(
+                                component,
+                                hierarchyArea.EditorWrap(hierarchyLabelAttribute.IsLeft ? xLeft : xRight, usedRects),
+                                hierarchyLabelAttribute,
+                                renderTargetInfo
+                            );
+
+                            if (used)
+                            {
+                                if (string.IsNullOrEmpty(groupBy))
+                                {
+                                    if (hierarchyLabelAttribute.IsLeft)
+                                    {
+                                        xLeft = headerUsed.UsedRect.xMax;
+                                    }
+                                    else
+                                    {
+                                        xRight = headerUsed.UsedRect.x;
+                                    }
+                                }
+                                else
+                                {
+                                    if (hierarchyLabelAttribute.IsLeft)
+                                    {
+                                        preLeftUsedRects.Add(headerUsed.UsedRect);
+                                        preLeftGroupBy = hierarchyLabelAttribute.GroupBy;
+                                    }
+                                    else
+                                    {
+                                        preRightUsedRects.Add(headerUsed.UsedRect);
+                                        preRightGroupBy = hierarchyLabelAttribute.GroupBy;
+                                    }
+                                }
+                            }
+                        }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static bool IsInsideCurrentPrefabContents(GameObject go)
+        {
+            PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (stage == null || stage.prefabContentsRoot == null)
+            {
+                return false;
+            }
+
+            Transform prefabRoot = stage.prefabContentsRoot.transform;
+            Transform target = go.transform;
+            return target == prefabRoot || target.IsChildOf(prefabRoot);
+        }
+
+        private static bool IsPrefabStageContextObject(GameObject go)
+        {
+            PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (stage == null || stage.prefabContentsRoot == null)
+            {
+                return false;
+            }
+
+            if (go.scene != stage.scene)
+            {
+                return false;
+            }
+
+            return !IsInsideCurrentPrefabContents(go);
+        }
+
+        private static bool IsDisabledBehaviour(Component component)
+        {
+            return EditorUtility.GetObjectEnabled(component) == 0;
+        }
+
+        private static GUIStyle _labelStylePrefab;
+
+        private static GUIStyle GetLabelStylePrefab()
+        {
+            return _labelStylePrefab ??= new GUIStyle(EditorStyles.label)
+            {
+                normal =
+                {
+                    textColor = new Color32(115, 156, 217, 255),
+                },
+            };
+        }
+
+        private static GUIStyle _labelStyleMissingPrefab;
+
+        private static GUIStyle GetLabelStyleMissingPrefab()
+        {
+            return _labelStyleMissingPrefab ??= new GUIStyle(EditorStyles.label)
+            {
+                normal =
+                {
+                    textColor = new Color32(211, 106, 106, 255),
+                },
+            };
+        }
+
+        private static bool _sceneHierarchyWindowsFieldInit;
+        private static FieldInfo _sceneHierarchyWindowsField;
+        private static bool _sceneHierarchyFieldInit;
+        private static FieldInfo _sceneHierarchyField;
+
+        private static (string Error, EditorWindow sceneHierarchyWindow, object sceneHierarchy) GetSceneHierarchyWindow(Rect selectionRect)
+        {
+            if (!_sceneHierarchyWindowsFieldInit)
+            {
+                Type windowType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
+                if (windowType == null)
+                {
+                    return ("SceneHierarchyWindow type not found", null, null);
+                }
+                _sceneHierarchyWindowsField ??= windowType.GetField(
+                        "s_SceneHierarchyWindows",
+                        BindingFlags.Static | BindingFlags.NonPublic
+                    );
+                _sceneHierarchyWindowsFieldInit = _sceneHierarchyWindowsField != null;
+            }
+
+            if (_sceneHierarchyWindowsField == null)
+            {
+                return ("_sceneHierarchyWindowsField not found", null, null);
+            }
+
+            if (_sceneHierarchyWindowsField.GetValue(null) is not IList windows)
+            {
+                return ("sceneHierarchyWindows not found", null, null);
+            }
+
+            List<EditorWindow> sceneHierarchyWindows = windows.Cast<EditorWindow>().Where(window => window != null).ToList();
+            EditorWindow sceneHierarchyWindow;
+            if (sceneHierarchyWindows.Count == 1)
+            {
+                sceneHierarchyWindow = sceneHierarchyWindows[0];
+            }
+            else
+            {
+                Vector2 screenPoint = GUIUtility.GUIToScreenPoint(selectionRect.center);
+                sceneHierarchyWindow =
+                    sceneHierarchyWindows.FirstOrDefault(r => r.hasFocus && r.position.Contains(screenPoint));
+                if (sceneHierarchyWindow == null)
+                {
+                    return ("sceneHierarchyWindow focused not found", null, null);
+                }
+            }
+
+            const BindingFlags instanceNonPublic = BindingFlags.Instance | BindingFlags.NonPublic;
+            // Type type = sceneHierarchyWindow.GetType();
+            if (!_sceneHierarchyFieldInit)
+            {
+                _sceneHierarchyField = sceneHierarchyWindow.GetType().GetField("m_SceneHierarchy", instanceNonPublic);
+                _sceneHierarchyFieldInit = _sceneHierarchyField != null;
+                if (_sceneHierarchyField == null)
+                {
+                    return ("_sceneHierarchyField not found", sceneHierarchyWindow, null);
+                }
+            }
+
+            object sceneHierarchy = _sceneHierarchyField.GetValue(sceneHierarchyWindow);
+            string error = sceneHierarchy == null ? "sceneHierarchy not found" : "";
+
+            return (error, sceneHierarchyWindow, sceneHierarchy);
+        }
+
+        private static FieldInfo _keyboardControlIdField;
+        private static bool _keyboardControlIdFieldInit;
+
+        private enum SelectStatus
+        {
+            Normal,
+            NormalHover,
+            SelectFocus,
+            SelectUnfocus,
+        }
+
+        private static (string error, SelectStatus selectStatus) GetBgColor(
+            EditorWindow sceneHierarchyWindow,
+            object sceneHierarchy,
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+            int
+#endif
+                instanceID,
+            bool isHover)
+        {
+            (string selectedError,
+                IReadOnlyList<
+#if UNITY_6000_4_OR_NEWER
+                EntityId
+#else
+                int
+#endif
+                    > selectedIds) = GetSelectedIds(sceneHierarchy);
+            if (selectedError != "")
+            {
+                return (selectedError, default);
+            }
+
+            if (selectedIds.Contains(instanceID))
+            {
+                bool isTreeFocused = false;
+                // ReSharper disable once InvertIf
+                if (EditorWindow.focusedWindow == sceneHierarchyWindow)
+                {
+                    if (!_keyboardControlIdFieldInit)
+                    {
+                        const BindingFlags instanceNonPublic = BindingFlags.Instance | BindingFlags.NonPublic;
+                        _keyboardControlIdField =
+                            sceneHierarchy.GetType().GetField(
+                                "m_TreeViewKeyboardControlID", instanceNonPublic);
+                        _keyboardControlIdFieldInit = _keyboardControlIdField != null;
+                        if (_keyboardControlIdField == null)
+                        {
+                            return ("_keyboardControlIdFieldInit not found", default);
+                        }
+                    }
+                    int keyboardControlId = (int)_keyboardControlIdField.GetValue(sceneHierarchy);
+                    if (GUIUtility.keyboardControl == keyboardControlId)
+                    {
+                        isTreeFocused = true;
+                    }
+                    // var treeViewControllerState = treeViewController.GetPropertyValue<TreeViewState>("state");
+                    // expandedIds = treeViewControllerState?.expandedIDs.ToInts() ?? new();
+                    // && GUIUtility.keyboardControl == sceneHierarchy?.GetMemberValue<int>("m_TreeViewKeyboardControlID");
+                }
+
+
+                return ("", isTreeFocused ? SelectStatus.SelectFocus : SelectStatus.SelectUnfocus);
+            }
+
+            // ReSharper disable once ConvertIfStatementToReturnStatement
+            if (isHover)
+            {
+                return ("", SelectStatus.NormalHover);
+            }
+            return ("", SelectStatus.Normal);
+        }
+
+        private static FieldInfo _treeViewField;
+        private static bool _treeViewFieldInit;
+        private static PropertyInfo _treeViewControllerStateField;
+        private static bool _treeViewControllerStateFieldInit;
+
+        private static (string error,
+            IReadOnlyList<
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+            int
+#endif
+            > expandedIds) GetExpandedIds(object sceneHierarchy)
+        {
+            if (!_treeViewFieldInit)
+            {
+                _treeViewField = sceneHierarchy.GetType().GetField("m_TreeView", BindingFlags.Instance | BindingFlags.NonPublic);
+                _treeViewFieldInit = _treeViewField != null;
+            }
+
+            if (_treeViewField == null)
+            {
+                return ("_treeViewField not found", null);
+            }
+            object treeViewController = _treeViewField.GetValue(sceneHierarchy);
+            if (treeViewController == null)
+            {
+                return ("treeViewController not found", null);
+            }
+            // Debug.Log(treeViewController);
+            if (!_treeViewControllerStateFieldInit)
+            {
+                _treeViewControllerStateField = treeViewController.GetType().GetProperty("state", BindingFlags.Instance | BindingFlags.Public);
+                _treeViewControllerStateFieldInit = _treeViewControllerStateField != null;
+
+                if (_treeViewControllerStateField == null)
+                {
+                    return ("_treeViewControllerStateField not found", null);
+                }
+            }
+
+            // Debug.Log(prop);
+            object treeViewControllerStateRaw = _treeViewControllerStateField.GetValue(treeViewController);
+            // Debug.Log(treeViewControllerStateRaw);
+            if (treeViewControllerStateRaw is not
+                TreeViewState
+#if UNITY_6000_3_OR_NEWER
+                <EntityId>
+#endif
+                treeViewControllerState)
+            {
+                return ("treeViewControllerState not found", null);
+            }
+            // Debug.Log(treeViewControllerState);
+            // Debug.Log(treeViewControllerState.expandedIDs);
+
+            // ReSharper disable once RedundantCast
+            List<
+#if UNITY_6000_4_OR_NEWER
+                EntityId
+#else
+                int
+#endif
+            > expandedIds = treeViewControllerState.expandedIDs
+#if !UNITY_6000_4_OR_NEWER
+                .Select(each => (int)each)
+                .ToList()
+#endif
+                ;
+            // Debug.Log($"expanded: {string.Join(", ", treeViewControllerState.expandedIDs)}");
+            return ("", expandedIds);
+        }
+
+        private static (string error,
+            IReadOnlyList<
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+                int
+#endif
+            > selectedIds) GetSelectedIds(object sceneHierarchy)
+        {
+            if (!_treeViewFieldInit)
+            {
+                _treeViewField = sceneHierarchy.GetType().GetField("m_TreeView", BindingFlags.Instance | BindingFlags.NonPublic);
+                _treeViewFieldInit = _treeViewField != null;
+            }
+
+            if (_treeViewField == null)
+            {
+                return ("_treeViewField not found", null);
+            }
+            object treeViewController = _treeViewField.GetValue(sceneHierarchy);
+            if (treeViewController == null)
+            {
+                return ("treeViewController not found", null);
+            }
+            // Debug.Log(treeViewController);
+            if (!_treeViewControllerStateFieldInit)
+            {
+                _treeViewControllerStateField = treeViewController.GetType().GetProperty("state", BindingFlags.Instance | BindingFlags.Public);
+                _treeViewControllerStateFieldInit = _treeViewControllerStateField != null;
+
+                if (_treeViewControllerStateField == null)
+                {
+                    return ("_treeViewControllerStateField not found", null);
+                }
+            }
+
+            // Debug.Log(prop);
+            object treeViewControllerStateRaw = _treeViewControllerStateField.GetValue(treeViewController);
+            // Debug.Log(treeViewControllerStateRaw);
+            if (treeViewControllerStateRaw is not
+#if UNITY_6000_3_OR_NEWER
+                TreeViewState<EntityId>
+#else
+                TreeViewState
+#endif
+                treeViewControllerState)
+            {
+                return ("treeViewControllerState not found", null);
+            }
+            // Debug.Log(treeViewControllerState);
+            // Debug.Log(treeViewControllerState.expandedIDs);
+
+            // ReSharper disable once RedundantCast
+            IReadOnlyList<
+#if UNITY_6000_4_OR_NEWER
+            EntityId
+#else
+            int
+#endif
+            > selectedIDs = treeViewControllerState.selectedIDs
+#if !UNITY_6000_4_OR_NEWER
+                .Select(each => (int)each)
+                .ToList()
+#endif
+                ;
+            // Debug.Log($"expanded: {string.Join(", ", treeViewControllerState.expandedIDs)}");
+            return ("", selectedIDs);
+        }
+
+        private static readonly Color ColorSelectFocus = new Color(.17f, .365f, .535f);
+        private static readonly Color ColorSelectUnfocus = new Color(.3f, .3f, .3f);
+        private static readonly Color ColorNormal = new Color(0.22f, 0.22f, 0.22f);
+        private static readonly Color ColorHover = new Color(.265f, .265f, .265f);
+        private static readonly Color ColorStripedLight = new Color(1f, 1f, 1f, 0.025f);
+
+        private static void DrawIndentDepth(Rect drawIndent, int inherentDepth, Transform trans)
+        {
+            if (inherentDepth == 1)
+            {
+                Color useColor = TreeColor;
+                Transform parent = trans.parent;
+                if (parent != null)
+                {
+                    GameObjectConfig config = Util.GetGameObjectConfig(parent.gameObject).config;
+                    if (config.hasColor)
+                    {
+                        useColor = config.color;
+                    }
+                }
+
+                bool hasNext = HasNextSibling(trans);
+                if (hasNext)
+                {
+                    DrawDownThroughRight(drawIndent, useColor);
+                }
+                else
+                {
+                    DrawDownRight(drawIndent, useColor);
+                }
+
+                // EditorGUI.DrawRect(drawIndent, Color.blue);
+            }
+            else
+            {
+                Transform preParent = trans;
+                Transform parent = trans;
+                int accDepth = inherentDepth;
+                while (accDepth >= 1)
+                {
+                    accDepth--;
+                    preParent = parent;
+                    parent = parent.parent;
+                    if (parent == null)
+                    {
+                        return;
+                    }
+                }
+                // GUI.Label(drawIndent, parent.gameObject.name[0].ToString());
+                // GUI.Label(drawIndent, preParent.gameObject.name[0].ToString());
+                bool preParentHasNext = HasNextSibling(preParent);
+                if (preParentHasNext)
+                {
+                    Color useColor = TreeColor;
+                    if (parent != null)
+                    {
+                        GameObjectConfig config = Util.GetGameObjectConfig(parent.gameObject).config;
+                        if (config.hasColor)
+                        {
+                            useColor = config.color;
+                        }
+                    }
+                    DrawDownThrough(drawIndent, useColor);
+                }
+            }
+        }
+
+        private static bool HasNextSibling(Transform t)
+        {
+            Transform parent = t.parent;
+            if (parent == null)
+            {
+                return false;
+            }
+
+            int index = t.GetSiblingIndex();
+            return index + 1 < parent.childCount;
+        }
+
+        private static void DrawDownThroughRight(Rect rect, Color color)
+        {
+            float startX = rect.x + rect.width / 2 -  0.5f;
+            Rect downThrough = new Rect(startX, rect.y, 1, rect.height);
+            EditorGUI.DrawRect(downThrough, color);
+
+            Rect middleRight = new Rect(startX, rect.y + rect.height / 2 - 0.5f, rect.width / 2 + 1f, 1);
+            EditorGUI.DrawRect(middleRight, color);
+        }
+
+        private static void DrawDownThrough(Rect rect, Color color)
+        {
+            float startX = rect.x + rect.width / 2 - 0.5f;
+            Rect downThrough = new Rect(startX, rect.y, 1, rect.height);
+            EditorGUI.DrawRect(downThrough, color);
+        }
+
+        private static void DrawDownRight(Rect rect, Color color)
+        {
+            float startX = rect.x + rect.width / 2 - 0.5f;
+            Rect down = new Rect(startX, rect.y, 1, rect.height / 2);
+            EditorGUI.DrawRect(down, color);
+
+            Rect middleRight = new Rect(startX, rect.y + rect.height / 2 - 0.5f, rect.width / 2 + 1f, 1);
+            EditorGUI.DrawRect(middleRight, color);
+        }
+
+        private static void DrawRightThrough(Rect rect, Color color)
+        {
+            Rect middleRight = new Rect(rect.x, rect.y + rect.height / 2 - 0.5f, rect.width, 1);
+            EditorGUI.DrawRect(middleRight, color);
+        }
+    }
+}

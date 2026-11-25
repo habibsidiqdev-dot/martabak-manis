@@ -1,0 +1,233 @@
+## 1.6.3 ##
+
+Fix: fbx nested inside prefab got detected as a prefab [#4](https://github.com/TylerTemp/SaintsHierarchy/issues/4)
+
+## 1.6.2 ##
+
+Fix: improved the navigation when search.
+
+## 1.6.1 ##
+
+1.  Fix: Tag/Layer picker gave error after select
+2.  Fix: prefab nested fbx did not show correct icon & expander [#4](https://github.com/TylerTemp/SaintsHierarchy/issues/4)
+
+## 1.6.0 ##
+
+Add alternative right click context menu to:
+
+1.  Hide menu you don't want
+2.  Move menu into another submenu, even a submenu you created
+3.  Rename menu name, custom icons
+4.  Provide default icons for menu
+
+Use `Tools` - `Saints Hierarchy` - `Replace Context Menu` to enable it
+
+## 1.5.4 ##
+
+For New Hierarchy View (6k.6+)
+
+1.  Add: Backport `Component Icons` to display at the end of the row. "Component Icons" length is dynamic, which looks awful in Unity's new "column" features. You can decide which one you want to use
+
+For New & Legacy Hierarchy
+
+1.  Add: `Remove Component` button in popup component editor
+2.  Change: Update the look of the popup component editor
+
+## 1.5.3 ##
+
+For New Hierarchy View (6k.6+)
+
+1.  Add: Optional `Tag(SH)` and `Layer(SH)` columns: Same as Unity's default one, but add "Search This Tag"/"Search This Layer" option to find all GameObject with this tag/layer
+2.  Add: "Find in Project" button to locate the scene in project. This option is removed by unity in new hierarchy view and now you can restore it
+
+For Legacy Hierarchy
+
+1.  Backport: Tag selector
+2.  Backport: Layer selector
+
+Note: legacy hierarchy does not support tag/layer search, so we use Unity's built-in [QuickSearch](https://docs.unity3d.com/Packages/com.unity.quicksearch@1.0/manual/index.html) instead
+
+## 1.5.2 ##
+
+Fix: unnecessary check box in scene picker. Bug introduced in 1.5.0 
+
+## 1.5.1 ##
+
+1.  Fix: Legacy code incorrect namespace
+2.  Fix: Incorrect resource path for some icons
+
+## 1.5.0 ##
+
+1.  Add(New): Support new Hierarchy API from Unity 6k.3 (Unity default using the new Hierarchy in 6k.6)
+2.  Add(New): Drag/Reorder your favorite gameObjects now has animation
+3.  Add(New): `ComponentIcons` now a standalone column in new Hierarchy
+4.  Add: You can force to switch mode using "Tools" - "Saints Hierarchy" - "Force Use New/Legacy Hierarchy" to switch mode (Note: ensure your Unity Editor is at the coresponding mode before changing)
+5.  Add(New): `HierarchyDraw`/`HierarchyLeftDraw` now returns visual element in the new hierarchy system
+6.  Add(New): Unity no longer display a warning icon if the prefab is missing in new Hierarchy. This behavior is now restored by Saints Hierarchy.
+7.  Fix: Runtime mode no longer list scenes that is not in build list/addressable in scene selector (because the selection will fail)
+
+The new Hierarchy API might not be stable. If you face any issues, please report.
+
+## 1.4.12 ##
+
+Fix: Favorite GameObject gave error if the scene has not finished loading in play mode
+
+## 1.4.11 ##
+
+Fix: Delay injection when entering play mode to reduce unnecessary errors
+
+## 1.4.8 ##
+
+1.  Fix: Improve the injection time for play mode
+2.  Fix: Import error
+
+## 1.4.7 ##
+
+Fix: Improve the injection point to not give error when entering play mode
+
+## 1.4.6 ##
+
+1.  Fix: The injection point now is more safe, and will not trigger many errors when entering play mode
+2.  Fix: Favorite GameObject failed to display in play mode if the object is a prefab directly placed in scene
+
+## 1.4.5 ##
+
+1.  Fix: UI Prefab did not correctly show name and components of `Canvas (Environment)`/`Prefab Mode in Context` node
+2.  NullReferenceException on scene path when entering play mode [PR#2](https://github.com/TylerTemp/SaintsHierarchy/pull/2) by [@hookSSi](https://github.com/hookSSi)
+
+## 1.4.4 ##
+
+Fix: Scene selector can not set active scene in play mode
+
+## 1.4.3 ##
+
+1.  Fix: Scene selector did not work in play mode
+2.  Add: Icon for Spine
+3.  Fix: `RectTransform` did not shown for `Canvas` when general scripts icon is on
+4.  Change: `Transform` icon now is always at the end of component icons
+
+## 1.4.2 ##
+
+1.  Add: Tooltips for hierarchy component icons
+2.  Add: Improved favorite gameObject clicking animation. Config for favorite click to also inspect the target GameObject
+3.  Improve: Wwise component icons now use specific icons for Initializer, Audio Listener, and Game Object components
+4.  Add: a little icon for favorite gameObject panel
+
+## 1.4.1 ##
+
+Fix: Search input for icon will close the popup
+
+## 1.4.0 ##
+
+1.  Add: Alt + left click a component icon to open a resizable component properties popup near the hierarchy item
+2.  Add: Configs for showing component icons for general scripts and Transform
+3.  Add: Component properties popup can toggle `Behaviour.enabled`
+4.  Add: Disabled Behaviour component icons are dimmed
+
+## 1.3.2 ##
+
+1.  Fix: `sv` color didn't paint an underline color
+2.  Add: Favorite GameObjects now can paint the correct underline by config
+
+## 1.3.1 ##
+
+1.  Fix: Scene selector was very slow if you use addressable
+2.  Fix: Accidently drag the scene if you try drag the mouse while scene selector is already open
+
+## 1.3.0 ##
+
+Add: Now you can click the scene name to switch scene in your project
+
+## 1.2.3 ##
+
+1.  Add: Favorite GameObjects can now read hierarchy config and async the appearance (icon, color)
+2.  Add: You can now override icon and color for Favorite GameObjects
+3.  Add: Favorite GameObjects now can read the default icon config and hide the icon
+
+## 1.2.2 ##
+
+1.  Add: You can now change alias and icon for a favorite gameObject
+2.  Improve: Better dragging detection for favorite gameObject
+
+## 1.2.0 ##
+
+Add: You can now drag & drop GameObjects to Favorite area at the top of the hierarchy.
+
+Note:
+1.  ATM the config is saved under personal config (so won't be saved by git), and can not be saved to team-shared config
+2.  ATM it can not show custom icons etc
+
+## 1.1.7 ##
+
+Add: Config for "GameObject Enabled Checker Every Row" [#1](https://github.com/TylerTemp/SaintsHierarchy/issues/1)
+
+## 1.1.6 ##
+
+1.  Fix: new added gameObject under a prefab instance now shows a `+` icon like Unity's default behavoir
+2.  Add: `Transparent Default Icon` config so label can be aligned
+3.  Change: Move menu to `Tools/SaintsHierarchy`
+
+## 1.1.5 ##
+
+Add "No Default Icon" config to remove the default white box icon for gameObject.
+
+## 1.1.2 ##
+
+Disabled item color fix
+
+## 1.1.1 ##
+
+1.  Fix: Unable to enable "Component Icons"
+2.  Fix: "Component Icons" no longer overflow to label if there are many
+3.  Fix: drawn content will try to not overlap (can not grarrenteed because of the limit of IMGUI)
+4.  Fix: Custom icon not working
+5.  Add: Search Icon now list all possible results from [UnityEditorIcons](https://github.com/nukadelic/UnityEditorIcons)
+
+## 1.1.0 ##
+
+1.  Fix: Error if the target component is missing for component icons
+2.  Add: Allow setup a personal config which does not get mixed with team config. Saved under `Library/PersonalHierarchyConfig.asset`
+3.  Change: GameObject Enabled Checker now only displays when any parent gameObjects is disabled
+
+## 1.0.0 ##
+
+1.  Better background color to not conflict with default one
+2.  Component icons supported
+3.  Background strip supported
+4.  Config tweaks supported
+5.  GameObject self enabled checker supported
+6.  GameObject icon supported
+
+## 0.0.8 ##
+
+1.  Use decoration instead of interface for easier label, button, and custom drawing
+2.  Add `Window`-`Saints`-`Disable Saints Hierarchy` to enable/disable this plugin
+
+## 0.0.7 ##
+
+Fix selection color when drag element
+
+## 0.0.6 ##
+
+1.  Fix children of `prefab` label is not blue
+2.  Fix prefab editor always displayed as disabled gameObject
+
+## 0.0.5 ##
+
+1.  Component Icon Support
+2.  Script controll of what to draw
+3.  Fix an error when a path is not found inside a prefab
+
+## 0.0.4 ##
+
+Fix disabled object
+
+## 0.0.3 ##
+
+Fix error when importing fbx type
+
+## 0.0.2 ##
+
+1.  Add background color custom support
+2.  Improve preformance
+3.  Indent color now changes with background color

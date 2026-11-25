@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 4d4c2a0c2c76450985d7ed7d13d9d79f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/HierarchyUI/Renderer/LabelRenderer.cs
+  uploadId: 1058616

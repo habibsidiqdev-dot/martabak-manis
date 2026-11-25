@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 497926d3f36b4b05b0e146611db867a4
+timeCreated: 1767509820
+AssetOrigin:
+  serializedVersion: 1
+  productId: 389154
+  packageName: Saints Hierarchy
+  packageVersion: 1.6.3
+  assetPath: Packages/today.comes.saintshierarchy/Editor/Core/Utils/RichTextDrawer.cs
+  uploadId: 1058616
