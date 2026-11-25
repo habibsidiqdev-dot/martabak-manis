@@ -3352,7 +3352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b798df919ba0244af6b8827c8baf01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingItems: []
+  startingItems:
+  - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
 --- !u!114 &514065344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4018,6 +4019,9 @@ MonoBehaviour:
   dialogueLabel: {fileID: 509542484}
   resonanceLabel: {fileID: 251860940}
   turnsLabel: {fileID: 138442347}
+  dialogueAutoSize: 1
+  dialogueMinFontSize: 22
+  dialogueMaxFontSize: 30
   approachButtons:
   - approach: 0
     button: {fileID: 2034394586}
@@ -4375,8 +4379,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 480, y: 23.005005}
-  m_SizeDelta: {x: 880, y: 0}
+  m_AnchoredPosition: {x: 480, y: 45}
+  m_SizeDelta: {x: 1233, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &647440035
 MonoBehaviour:
@@ -4391,7 +4395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.08, g: 0.08, b: 0.1, a: 0.88235295}
+  m_Color: {r: 0.08, g: 0.08, b: 0.1, a: 0.9607843}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4445,8 +4449,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 10
     m_Right: 10
-    m_Top: 10
-    m_Bottom: 10
+    m_Top: 15
+    m_Bottom: 15
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -5308,7 +5312,6 @@ GameObject:
   - component: {fileID: 768738191}
   - component: {fileID: 768738195}
   - component: {fileID: 768738194}
-  - component: {fileID: 768738193}
   - component: {fileID: 768738192}
   - component: {fileID: 768738196}
   m_Layer: 5
@@ -5335,7 +5338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 440, y: -709}
+  m_AnchoredPosition: {x: 440, y: -601.28033}
   m_SizeDelta: {x: 880, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &768738192
@@ -5351,10 +5354,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 24
-    m_Right: 24
-    m_Top: 20
-    m_Bottom: 20
+    m_Left: 15
+    m_Right: 15
+    m_Top: 13
+    m_Bottom: 13
   m_ChildAlignment: 3
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -5364,26 +5367,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &768738193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 768738190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: 88
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &768738194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6110,8 +6093,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 27
+  m_fontSizeBase: 27
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6124,7 +6107,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 20
+  m_paragraphSpacing: 50
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -7984,8 +7967,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 131}
-  m_SizeDelta: {x: -80, y: -364}
+  m_AnchoredPosition: {x: 0, y: 155}
+  m_SizeDelta: {x: -80, y: -377.4393}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1192909947
 MonoBehaviour:
@@ -8005,7 +7988,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 165
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -8687,6 +8670,63 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.02, y: 0.019999998, z: 0.018295286}
   m_Center: {x: 0, y: 0, z: -0.0008523566}
+--- !u!1 &1278295734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1278295735}
+  - component: {fileID: 1278295736}
+  m_Layer: 0
+  m_Name: Ending
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1278295735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278295734}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1278295736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278295734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98887d6eb8e6264a9e2ea6ec312df49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Kamu berhasil keluar.
+  message: Gerbang terbuka, dan malam yang panjang itu akhirnya berlalu.
+  restartLabel: Main lagi
+  quitLabel: Keluar
+  showQuitButton: 1
+  delay: 1.5
+  fadeDuration: 1.2
+  backgroundColor: {r: 0.03, g: 0.03, b: 0.04, a: 0.98039216}
+  titleColor: {r: 0.98, g: 0.8, b: 0.38, a: 1}
+  messageColor: {r: 0.96, g: 0.94, b: 0.9, a: 1}
+  buttonColor: {r: 0.1, g: 0.1, b: 0.12, a: 0.9}
+  buttonHoverColor: {r: 0.45, g: 0.32, b: 0.1, a: 0.95}
+  buttonPressedColor: {r: 0.95, g: 0.72, b: 0.25, a: 1}
 --- !u!65 &1291703220
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17813,7 +17853,9 @@ GameObject:
   - component: {fileID: 1967576444718336599}
   - component: {fileID: 2129456177033546377}
   - component: {fileID: 2879923690433520829}
-  m_Layer: 0
+  - component: {fileID: 2879923690433520831}
+  - component: {fileID: 2879923690433520830}
+  m_Layer: 3
   m_Name: door_classic_single.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20248,6 +20290,96 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2879923690433520830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937157141234304080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1ed996580147349ac00b028b60a822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorName: Pintu
+  requiredItems:
+  - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
+  consumeItems: 1
+  lockedMessage: 'Gerbang terkunci. Butuh: {item}'
+  hinge: {fileID: 0}
+  rotationAxis: {x: 0, y: 1, z: 0}
+  openAngle: -90
+  openDuration: 1
+  openCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  canClose: 0
+  blockedMessage: Ada yang menghalangi.
+  blockPadding: 0.5
+  onOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1278295736}
+        m_TargetAssemblyTypeName: EndingScreen, Assembly-CSharp
+        m_MethodName: Show
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClosed:
+    m_PersistentCalls:
+      m_Calls: []
+  onLockedAttempt:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &2879923690433520831
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937157141234304080}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0022416878, y: 0.012000008, z: 0.022499999}
+  m_Center: {x: -0.000019056548, y: -0.0060018804, z: 0.011265657}
 --- !u!4 &2880060635421827597
 Transform:
   m_ObjectHideFlags: 0
@@ -39973,3 +40105,4 @@ SceneRoots:
   - {fileID: 1845021022}
   - {fileID: 1638492262}
   - {fileID: 1931993620}
+  - {fileID: 1278295735}
