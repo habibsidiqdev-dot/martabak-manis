@@ -203,36 +203,41 @@ namespace TrustSystem
             _encounter.Begin();
 
             _view.HideResult();
-            _view.SetDialogue(data.IntroDialogue);
-            PresentTurn(data.IntroDescription);
+            _view.SetDialogue(ComposeIntro());   // deskripsi pembuka + dialogue pembuka, satu kotak
+            PresentTurn();
         }
 
-        private void PresentTurn(string preface)
+        // Narasi (deskripsi pembuka) tampil miring & sedikit redup di atas dialogue NPC, dipisah satu baris kosong.
+        // Supaya jalan, gaya dasar DialogueLabel harus Normal. Trim() membuang sisa \r / spasi dari data.
+        private const string NarrationColor = "#C7BDAD";
+
+        private string ComposeIntro()
         {
-            // Gaya lewat rich text TMP: intro description = tebal (tidak miring), petunjuk/clue = miring.
-            // Supaya jalan, gaya dasar teks petunjuk di UI harus Normal (tag </i> tidak bisa mematikan italic dari gaya dasar).
-            var sb = new StringBuilder();
+            string narration = (data.IntroDescription ?? string.Empty).Trim();
+            string line = (data.IntroDialogue ?? string.Empty).Trim();
 
-            if (!string.IsNullOrEmpty(preface))
-                sb.Append("<b>").Append(preface).Append("</b>").AppendLine().AppendLine();
+            if (narration.Length == 0) return line;
 
+            string styled = $"<i><color={NarrationColor}>{narration}</color></i>";
+            return line.Length == 0 ? styled : styled + "\n\n" + line;
+        }
+
+        private void PresentTurn()
+        {
+            // Kotak petunjuk HANYA berisi petunjuk bahasa tubuh (miring).
+            // Deskripsi pembuka ada di kotak dialogue (lihat ComposeIntro).
             var hints = new StringBuilder();
             IReadOnlyList<Clue> clues = _encounter.Clues;
-            if (clues.Count == 0)
+            for (int i = 0; i < clues.Count; i++)
             {
-                hints.Append(data.NoClueText);
-            }
-            else
-            {
-                for (int i = 0; i < clues.Count; i++)
-                {
-                    string line = data.GetClueText(clues[i].Approach, clues[i].Mood);
-                    if (!string.IsNullOrEmpty(line)) hints.AppendLine(line);
-                }
+                string line = data.GetClueText(clues[i].Approach, clues[i].Mood);
+                if (!string.IsNullOrEmpty(line)) hints.AppendLine(line);
             }
 
-            sb.Append("<i>").Append(hints.ToString().TrimEnd()).Append("</i>");
-            _view.SetDescription(sb.ToString());
+            // Giliran ini tanpa petunjuk, atau semua teks petunjuknya kosong: pakai teks "sulit dibaca".
+            if (hints.Length == 0) hints.Append(data.NoClueText);
+
+            _view.SetDescription("<i>" + hints.ToString().Trim() + "</i>");
             RefreshStatus();
             _view.SetInputEnabled(true);
         }
@@ -255,7 +260,8 @@ namespace TrustSystem
                 result.Approach,
                 result.Mood
             );
-            if (!string.IsNullOrEmpty(reaction)) _view.SetDialogue(reaction);
+            // Kategori reaksi kosong: tampilkan "..." supaya deskripsi/dialogue pembuka tidak tertinggal di kotak.
+            _view.SetDialogue(string.IsNullOrEmpty(reaction) ? "..." : reaction);
 
             string feedback = $"Kamu memilih {result.Approach.Label()}.   Resonansi {result.Delta.ToString("+0;-0;0")}";
             _view.SetDescription("<i>" + feedback + "</i>");   // tetap miring seperti petunjuk
@@ -277,7 +283,7 @@ namespace TrustSystem
                     break;
 
                 default:
-                    PresentTurn(null);   // giliran berikutnya, mood sudah diputar ulang di TrustEncounter
+                    PresentTurn();   // giliran berikutnya, mood sudah diputar ulang di TrustEncounter
                     break;
             }
 
