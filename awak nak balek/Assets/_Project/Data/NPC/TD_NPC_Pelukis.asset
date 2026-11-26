@@ -31,83 +31,81 @@ MonoBehaviour:
     max: -2
   requiredItems:
   - {fileID: 11400000, guid: c544d895c91904245884e8a3f9b28aa6, type: 2}
-  lockedDialogue: Kecuali kau membawa pelarut cat atau alat pembersih yang kuminta
-    dari bar, enyah sana!
+  lockedDialogue: Lukisanku hancur! Tolong, kamu harus cariin aku sesuatu buat mengencerkan
+    cat yang rusak ini
   rewardItems:
   - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
-  introDescription: 'Di dekat sudut galeri yang bermandikan cahaya lampu sorot hangat,
-    sang pelukis berdiri di depan kanvas raksasa dengan tangan belepotan cat minyak.
-    Napasnya memburu, matanya menyala oleh ambisi liar, frustrasi karena detail karya
-    agungnya terancam rusak sebelum pameran tengah malam dimulai. '
-  introDialogue: "\u201CAh! Itu dia! Pelarut dan bahan itu... Kau benar-benar menyelamatkan
-    mahakaryaku dari kehancuran total! Baiklah, karena kau telah berjasa bagi masa
-    depan seni modern, apa yang kau butuhkan?"
-  winDialogue: "Kau adalah penyelamat sejati! Ambillah surat arahan resmi penugasan
-    studionu ini\u2014katakan pada si penjaga pintu bahwa kau pergi atas mandat langsung
-    dariku untuk misi seni yang sangat penting!"
-  loseDialogue: Pergi! Konsentrasiku hancur lebur karena kehadiranmu! Kau sama sekali
-    tidak punya jiwa seni!
-  noClueText: " Ia lanjut fokus dan memikirkan karya seni yang ia buat\r"
+  introDescription: Di dekat perapian,  seorang pelukis tampak  berantakan; cat berserakan
+    di mana-mana, mulai dari lantai hingga wajahnya. Untungnya, keadaan sulit yang
+    dialaminya saat ini tidak mengurangi motivasinya untuk mewujudkan karya agungnya
+  introDialogue: Itu dia! Ya, ya, ya, terima kasih! Kamu adalah penyelamat gerakan
+    seni modern! Aku berhutang budi padamu!
+  winDialogue: Kamu hebat! Kau Tahu? Kamu bahkan bisa jadi murid jeniusku! Nah, ambil
+    surat ini untuk meyakinkan si bapak tua di lobi agar mengizinkanmu keluar dan
+    mengembangkan bakatmu itu!
+  loseDialogue: Konsentrasiku hancur sekarang! Pergi saja dan biarkan aku berpikir
+    sebentar. Terima kasih, tapi nggak ada gunanya!
+  noClueText: "Dia begitu fokus sehingga tidak ada tanda-tanda yang mencolok yang
+    terlihat darinya\r"
   hints:
   - approach: 0
     likeLines:
-    - With you here, her brushstrokes got more...showy
+    - Dengan kehadiranmu di sini, sapuan kuasnya jadi lebih...mencolok
     rejectLines:
-    - Her brushstrokes are getting weaker having eyes looking at her
+    - Goresan kuasnya semakin lemah karena ada yang menatapnya
   - approach: 1
     likeLines:
-    - She asks you if your familiar with the inspiration for her art style
+    - Dia bertanya kepadamu apakah kamu tahu apa yang menjadi inspirasi gaya seninya
     rejectLines:
-    - She told her frustation to you about people here talking about art like they
-      can even paint
+    - Dia mencurahkan rasa frustrasinya kepadamu mengenai orang-orang di sini yang
+      membicarakan seni seolah-olah mereka bisa melukis
   - approach: 2
     likeLines:
-    - She hand you a small canvas to have you do something too
+    - Dia memberimu sebuah kanvas kecil agar kamu juga bisa melakukan sesuatu
     rejectLines:
-    - She darted her eyes on her painting, and ask you to not touch it
+    - Dia melirik lukisannya, lalu meminta kamu untuk tidak menyentuhnya
   - approach: 3
     likeLines:
-    - She is visibly thinking and shot down any attempts of talking for you
+    - Dia tampak sedang berpikir dan langsung menggagalkan setiap upaya untuk berbicara
+      atas namamu
     rejectLines:
-    - She struggle to focus without talking with a single soul
+    - Dia kesulitan berkonsentrasi tanpa berbicara dengan siapa pun
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - "Kuas dicengkam erat-erat, mata berbinar bisa terlihat dari sang pelukis\u201D  
-      \u201CKau melihat komposisi lukisan ini sampai akar akarnya!? Impresif!"
+    - Luar biasa! Aku bahkan tidak bermaksud agar orang lain bisa dengan mudah melihatnya!
     likeLines:
-    - Kau melihat retakan pigmen merah itu, kan? Akhirnya ada yang punya mata jeli
-      di ruangan ini.
+    - Kamu lihat itu? Benarkah? Kamu bersumpah?
     neutralLines:
-    - Kau melihat, namun belum sampai jiwanya
+    - Itu kan... cukup jelas?
     rejectLines:
-    - Jangan tatap lukisanku setengah jadi seperti itu! Belum saatnya dinikmati publik!
+    - Jangan intip! Karya ini belum selesai!
   - approach: 1
     veryLikeLines:
-    - Betul! Wawasan estetika luas seperti itu dapat membawa lukisan ini ke zaman
-      selanjutnya!
+    - Dengan pengetahuan itu, kamu mungkin adalah sseorang ahli yang terlahir kembali!
     likeLines:
-    - Luar biasa! Kau paham betul filosofi kontemporer di balik sapuan warna gelap
-      ini!
+    - Wah, kamu benar-benar tahu banyak! Padahal aku sendiri baru tahu soal itu belum
+      lama ini
     neutralLines:
-    - Referensi mu standar, namun lanjutkan
+    - Eh, aku sih udah tahu itu, tapi, tidak semua orang tahu
     rejectLines:
-    - Teori murahan dari orang awam! Jangan ajari aku soal komposisi visual!
+    - 'Kamu tidak berpikir aku sudah tahu itu? Ayolah, aku bukan pemula '
   - approach: 2
     veryLikeLines:
-    - Momentum dan kecepatan mu menyelamatkan karya ini!
+    - Benar sekali! Seni bukan hanya soal kecerdasan, tapi juga soal refleks.
     likeLines:
-    - Gerakan refleks yang luar biasa sigap! Bagus, pegang sisi itu sebentar!
+    - Refleks yang bagus!
     neutralLines:
-    - Kamu cepat, tapi hati-hati, kamu berada di antara karya yang berharga
+    - Intuisimu bagus, tapi hati-hati! Kamu bisa merusak hasil kerjaku
     rejectLines:
-    - Jangan sentuh permukaannya! Kau bisa merusak tekstur dimensionalnya, bodoh!
+    - Jangan, jangan, jangan sentuh itu! Kamu akan merusak lukisannya!
   - approach: 3
     veryLikeLines:
-    - Akhirnyaa~
+    - Terima kasih, susah untuk fokus di sini,  sepertinya  aku salah pilih tempat
+      untuk melukis.
     likeLines:
-    - Kesunyianmu saat membantuku tadi... sangat mendamaikan jiwa seniman.
+    - 'Banyak sekali orang yang ngobrol di sini, bagus  kamu tidak ikut-ikutan  '
     neutralLines:
-    - Diam saja? Baiklah, selama tidak menggangu ku kerja
+    - Ada apa? Kehabisan inspirasi?
     rejectLines:
-    - "\u201CKenapa malah diam mematung begitu?! Ucapkan sesuatu, bantu aku!"
+    - Hei, kalau kamu tidak mau bantu, setidaknya kasih aku masukan!

@@ -31,83 +31,80 @@ MonoBehaviour:
     max: -2
   requiredItems:
   - {fileID: 11400000, guid: 2654fd81281f7d2428cd2b7318027e6a, type: 2}
-  lockedDialogue: ' Siapa kau? Temukan dulu pena perakku yang hilang, baru akan kupikirkan
-    apakah kau cukup sepadan dengan waktuku.'
+  lockedDialogue: Dan siapa kamu? Hmm... carikan aku pulpenku, nanti kita lihat saja
+    selanjutnya apa
   rewardItems:
   - {fileID: 11400000, guid: 3db96a1ce1ca72f47a5d9f8d6ef1b6ca, type: 2}
-  introDescription: "Kata demi kata dilontarkan dengan nada mengalun penuh pretensi\u2014setidaknya
-    bagi para kaum intelektual di sekitarnya. Bait-bait puisi yang ia ucapkan sengaja
-    dibuat rumit, berat, dan sulit dicerna. "
-  introDialogue: "\u201CKau... berhasil menemukan penaku? Baiklah, pengamatan yang
-    lumayan. Mungkin kau memang tidak sepenuhnya membosankan. Jadi, apa yang sebenarnya
-    kau inginkan dariku?\u201D \r"
-  winDialogue: "\u201CLuar biasa! Sungguh menyenangkan bisa berdiskusi dengan sesama
-    intelek di ruangan yang penuh orang kaku ini. Terimalah tanda hormatku ini!\u201D "
-  loseDialogue: "\u201CCukup! Pergi dari hadapanku, kau hanya membuang-buang waktu
-    berhargaku yang bernilai tinggi!\u201D \r\n"
-  noClueText: Sang Sastrawan membuang muka, menulis sesuatu di buku catatannya dengan
-    gestur sinis.
+  introDescription: "Kata-kata dalam puisi-puisinya sarat dengan makna yang mendalam,
+    setidaknya bagi para \u201Cintelektual\u201D di sekelilingnya. Hal itu sengaja
+    dibuat agar terdengar lebih indah daripada yang sebenarnya."
+  introDialogue: Kamu benar-benar menemukan pulpenku? Eh, lumayanlah. Ayo kita lihat
+    apa yang kamu bawa yang nilainya lebih berharga daripada waktuku
+  winDialogue: Luar biasa! Itulah yang kuharapkan dari orang secerdas dirimu! Nah,
+    ini surat rekomendasi yang membuktikan bahwa kamu bukan sekadar gelandangan biasa
+  loseDialogue: Cukup! Pergi dari hadapanku! Kau benar-benar membuang-buang waktuku
+  noClueText: Penyair itu bersikap seolah-olah dirinya sangat hebat dan angkuh, sehingga
+    kamu tidak bisa menganalisis tindakannya tanpa merasa jijik
   hints:
   - approach: 0
     likeLines:
-    - He shoves you his magnificant writing for you to stick your eyes
+    - Dia menyodorkan tulisan indahnya kepadamu agar kamu bisa memandangnya
     rejectLines:
-    - He takes away his notebook, deeming his works not worth your eyes
+    - Dia mengambil buku catatannya, karena menganggap matamu tidak pantas untuk
+      dimanjakan oleh puisi buatan nya
   - approach: 1
     likeLines:
-    - He speak about some famous poets and expects you to understand
+    - Dia berbicara tentang beberapa penyair terkenal dan berharap kamu mengerti
     rejectLines:
-    - He is unimpressed with the audience lack of intelect, he fully expects you
-      to be the same
+    - Dia tidak terkesan dengan kurangnya kecerdasan penonton, dia yakin kamu  juga
+      sama saja
   - approach: 2
     likeLines:
-    - he challenge you on writing a poet!
+    - Dia menantangmu untuk menjadi peraga latar puisinya
     rejectLines:
-    - He wanted you to hear his words and not move an inch
+    - Dia ingin kamu mendengarkan kata-katanya dan tidak bergerak sedikit pun
   - approach: 3
     likeLines:
-    - when you talk, he read his poet louder
+    - Saat kamu berbicara, dia membacakan puisinya dengan suara lebih keras
     rejectLines:
-    - the lack of feedback sours him
+    - Kurangnya umpan balik membuatnya kesal
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - Akhirnya! Seseorang yang mampu menangkap nuansa batin di balik setiap jeda
-      napasku! Kau punya jiwa yang tajam, kawan!
+    - Akhirnya ada yang sadar!
     likeLines:
-    - Gaya bahasa puisiku... indah dan berlapis kan? Kau pasti merasakannya.
+    - Puisi-puisiku keren, ya?
     neutralLines:
-    - Pengamatan yang biasa saja. Belum menyentuh kedalaman yang kumaksud.
+    - Kamu baru saja mengatakan hal yang sudah jelas, tapi aku biarkan saja, tidak
+      semua orang desa tahu hal itu
     rejectLines:
-    - ...Ada apa? Kenapa dari tadi kau mengamati gerak-gerikku terus?
+    - Apa? Ada yang aneh dengan aku?
   - approach: 1
     veryLikeLines:
-    - "Brilian! Referensimu tepat sasaran\u2014akhirnya ada yang bicara pada level
-      yang setara denganku"
+    - Referensi yang luar biasa! Senang sekali melihat ada orang cerdas lainnya di
+      sini!
     likeLines:
-    - Jadi, ternyata bukan cuma aku satu-satunya orang pintar di gedung busuk ini
+    - Ternyata aku bukan satu-satunya yang cukup berbakat di sini
     neutralLines:
-    - Cukup tahu, rupanya. Tapi kutipan saja belum cukup.
+    - Cukup dasar.
     rejectLines:
-    - Kau pikir kau siapa, hah? Apa kau benar-benar paham substansi dari apa yang
-      kau debatkan?
+    - Pelajari dulu apa yang kamu bicarakan sebelum bicara sembarangan ke aku
   - approach: 2
     veryLikeLines:
-    - Luar biasa! Gerakanmu punya ritme yang nyaris... puitis! Aku menyukai kejutan
-      semacam itu!
+    - Ya! Begitu! Kamu membuat puisi-puisiku terasa lebih hidup!
     likeLines:
-    - Kuhargai kenyataan bahwa kau tidak menggebrak meja atau bicara terus-menerus.
+    - Itu arah yang benar!
     neutralLines:
-    - Cukup menarik, meski sedikit terlalu ramai untuk seleraku.
+    - Kamu terlalu banyak bergerak, coba tenang sebentar, ya?
     rejectLines:
-    - Gerakan apa itu tadi? Jangan merusak estetika ruanganku!
+    - Dan menurutmu, apa yang sedang kamu lakukan?
   - approach: 3
     veryLikeLines:
-    - Sempurna... keheningan yang sarat makna! Kadang yang tidak terucapkan justru
-      paling menggema!
+    - Dengarkan dan pelajari, dengarkan dan pelajari
     likeLines:
-    - Hooo... Menarik juga caramu mendengarkan dalam diam.
+    - Bagus, puisi-puisiku membuatmu kehabisan kata-kata
     neutralLines:
-    - "\u201CHening lagi. Entah ini kedalaman, atau sekadar kehabisan kata."
+    - Sudah kuduga, kamu bahkan nggak bisa ngikutin!
     rejectLines:
-    - Mau coba-coba mempermainkanku dengan bungkam, hah? Pergi sana!
+    - Jadi, kamu sudah bersusah payah seperti itu hanya untuk kemudian menghilang
+      begitu saja dariku?!

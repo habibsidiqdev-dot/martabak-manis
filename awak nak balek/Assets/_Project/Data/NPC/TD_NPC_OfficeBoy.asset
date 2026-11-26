@@ -33,81 +33,82 @@ MonoBehaviour:
   lockedDialogue: 
   rewardItems:
   - {fileID: 11400000, guid: 4b9393f2e8d59a14fb05d1fe2ab45859, type: 2}
-  introDescription: "Tongkat pel bergerak teratur ke kanan dan ke kiri, diiringi
-    siulan kecil sebuah lagu lama yang tak dikenal. Seorang paruh baya membersihkan
-    sudut koridor dengan tenang, tampak pasrah sekaligus damai dengan keadaannya
-    malam ini. \r"
-  introDialogue: "\u201C...Ya? Oh, kau ingin mencari jalan keluar? Yah, aku mengerti...
-    Suasana di dalam sana memang bukan untuk semua orang, heh.\u201D\r"
-  winDialogue: Hei, senang bisa ngobrol santai denganmu. Ambil kunci ini; kudengar
-    bartender di lounge depan sedang kewalahan, mungkin bantuanmu bisa mempermudah
-    jalan pulangnya.
-  loseDialogue: Begitu ya..? Ah, sepertinya aku harus kembali mengepel sebelum mandor
-    melihatku melamun.
-  noClueText: Penjaga menahan ekspresinya; belum ada petunjuk yang jelas. ini placeholder
+  introDescription: 'Pel itu digesekkan ke kiri dan ke kanan, lalu ke kiri dan ke
+    kanan lagi. Dia sedang menyenandungkan sebuah lagu yang tidak kamu kenal dengan
+    cukup...layak untuk didengar. '
+  introDialogue: Mau istirahat sebentar di sini, ya? Mhm, aku paham, memang gampang
+    banget jadi orang yang merusak suasana kalau sama orang-orang seperti gitu
+  winDialogue: Senang bisa berdiskusi denganmu. Ini, ambil kunci ini, kayaknya si
+    bartender mungkin butuh bantuanmu, atau... yah, pakai saja pintu belakang
+  loseDialogue: Tenang saja di sini, kamu nggak bakal bisa meyakinkan siapa pun dengan
+    cara seperti itu
+  noClueText: Dia kembali bekerja dan kamu kehilangan kesempatan untuk mengetahui
+    suasana hatinya. Uang lebih penting daripada obrolan; memang terhormat, tapi
+    tetap saja menyebalkan.
   hints:
   - approach: 0
     likeLines:
-    - He's showing off his mastery in cleanliness, signaling you to see his work
+    - Dia sedang memamerkan keahliannya dalam hal kebersihan, sambil memberi isyarat
+      agar kamu melihat hasil kerjanya
     rejectLines:
-    - He's slowing down his mopping, he doesnt seem to be comfortable being looked
-      at
+    - Dia mulai melambat saat mengepel, sepertinya dia merasa tidak nyaman diperhatikan
   - approach: 1
     likeLines:
-    - He noticed your rather educated stance, with eyes of wanting to ask, assuming
-      you are indeed educated
+    - Dia memperhatikan sikapmu yang terkesan berpendidikan, dengan tatapan seolah
+      ingin bertanya, dengan anggapan bahwa kamu memang berpendidikan
     rejectLines:
-    - He is rather confused with how you talk so technically.
+    - Dia agak bingung dengan cara bicaramu yang begitu teknis.
   - approach: 2
     likeLines:
-    - He signals you to help him clean up and not just stand there watching the floor
-      dry
+    - Dia memberi isyarat agar kamu membantunya membersihkan, bukan hanya berdiri
+      di sana sambil menatap lantai yang sedang mengering
     rejectLines:
-    - He pointed you to a dry place, asking you to not get involved in his work
+    - Dia mengarahkanmu ke tempat yang kering, sambil meminta agar kamu tidak ikut
+      campur dalam pekerjaannya
   - approach: 3
     likeLines:
-    - He sings along the music he blasted on his headphones, everytime you talk he
-      sings louder
+    - Dia bernyanyi mengikuti lagu yang diputar kencang lewat headphone-nya, setiap
+      kali kamu bicara, dia bernyanyi semakin keras
     rejectLines:
-    - During gaps of the  conversation, He tries to do small talks to break up the
-      akwardness
+    - Di sela-sela percakapan, dia mencoba mengobrol ringan untuk meredakan suasana
+      yang canggung
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - sampai detail noda di sudut ubin itu kau perhatikan? Mata awasmu membuatku
-      merasa kerjaanku tidak sia-sia!
+    - Kamu sampai melihat itu? Matamu tajam, ya? Dan kerja bagus dari aku, ya?
     likeLines:
-    - Ternyata masih ada orang yang sudi menghargai jerih payah sekecil ini.
+    - Senang rasanya masih ada orang yang menghargai pekerjaan ini
     neutralLines:
-    - Iya, kelihatan begitu ya. Biasalah, kerjaan rutin.
+    - Yah, seperti itu lah
     rejectLines:
-    - ....
+    - Hei, itu aneh. tidak perlu di pikirkan terlalu dalam, kan?
   - approach: 1
     veryLikeLines:
-    - penjelasanmu sangat masuk akal! Baru kali ini ada tamu yang ngerti urusan teknis
-      sampai sedalam itu!
+    - Wah, itu masuk akal! Kamu memang paham sekali, ya? Yah... lagipula, mereka
+      tak akan mngundang mu masuk kalau kamu sebaliknya
     likeLines:
-    - Aku tahu kalian para tamu adalah orang-orang terpelajar, tapi tak kusangka
-      seluas ini wawasanmu.
+    - Sungguh sesuai dengan ekspektasi para pengunjung di sini, para jenius di bagian
+      pengetahuan  dan dunia kerja nyata
     neutralLines:
-    - Ooh, begitu ya. Kedengarannya sih masuk akal.
+    - Iya... Iya... ya, itu... masuk akal, mungkin
     rejectLines:
-    - Aku tidak tahu harus merespons apa, tapi perbaiki lagi teori-teorimu itu.
+    - Tidak, bukan itu. Dari mana  kau dapat sumber-sumber itu?
   - approach: 2
     veryLikeLines:
-    - ' Gerak cepatmu benar benar meringankan beban kerjaku malam ini!'
+    - Dan begitulah seharusnya! Kamu buat pekerjaanku jadi lebih mudah!
     likeLines:
-    - Impresif! Mau coba mendaftar kerja paruh waktu bersamaku kapan-kapan?
+    - Wah, kau bagus!
     neutralLines:
-    - Lumayan juga geraknya. Asal jangan sampai buat  repot saja.
+    - Tidak buruk, tapi masih kasar
     rejectLines:
-    - Tolong, jangan bertindak gegabah di area kerjaku.
+    - Ya, jangan ulangi hal itu lagi
   - approach: 3
     veryLikeLines:
-    - aku apresiasi ketenangan yang kau beri
+    - Sangat dihargai, memang bisa bikin stres kalau harus bekerja sambil menghadapi
+      suara-suara yang mengganggu
     likeLines:
-    - Terima kasih karena tidak membuat gaduh dan memberiku sedikit ruang untuk bekerja
+    - Senang kamu bisa menangkap sinyalku
     neutralLines:
-    - ...Aman, ya? Lanjut kalau gitu.
+    - ehhh, oke? jadi....
     rejectLines:
-    - Ada masalah apa, kawan? Tiba-tiba kau membisu begitu.
+    - Ada apa? Kamu kelihatan sangat diam

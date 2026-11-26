@@ -31,15 +31,15 @@ MonoBehaviour:
     max: -2
   requiredItems:
   - {fileID: 11400000, guid: bf81f9875980de84aab442110ba8ca6c, type: 2}
-  lockedDialogue: Aku kehabisan pasokan rempah esensial untuk racikan berikutnya.
-    Bantu aku ambil dulu.
+  lockedDialogue: Beberapa bahan pentingku sudah habis, tolong bantu aku dan aku
+    akan membantumu
   rewardItems:
   - {fileID: 11400000, guid: 2654fd81281f7d2428cd2b7318027e6a, type: 2}
   - {fileID: 11400000, guid: c544d895c91904245884e8a3f9b28aa6, type: 2}
-  introDescription: Aroma pekat rempah eksotis dan minuman kualitas tinggi menguar
-    di udara. Sang bartender meramu koktail dengan presisi cepat layaknya seorang
-    petarung mengatur strategi, sebuah kontras ketangguhan di tengah kaum borjuis
-    yang manja.
+  introDescription: Aroma-aroma yang harum dan wangi minuman lezat menyelimuti tempat
+    itu. Di antara para pengunjung kelas menengah yang kurang bugar, berdiri seorang
+    bartender yang tangguh dan penuh semangat. Gerakannya cepat, begitu pula wibawa
+    nya
   introDialogue: Kerja bagus. Sekarang, apa yang bisa kubantu untuk melancarkan urusanmu?
   winDialogue: Kerjasama yang bersih. Senang berbisnis denganmu di bar ini~
   loseDialogue: Ambil segelas tonik ini, sepertinya syaraf kepalamu sedang butuh
@@ -49,61 +49,63 @@ MonoBehaviour:
   hints:
   - approach: 0
     likeLines:
-    - The mixer is being thrown gracefully, with her face smiling, waiting for a
-      compliment from a keen eye
+    - Wanita itu melempar mixer dengan anggun, sambil tersenyum, menunggu pujian
+      dari seseorang yang jeli
     rejectLines:
-    - she is brewing quite an unsual drink for herself, she would rather not for
-      you to notice that weird concoction
+    - Dia sedang meracik minuman yang cukup aneh untuk dirinya sendiri, dia lebih
+      suka kalau kamu tidak menyadari ramuan aneh itu.
   - approach: 1
     likeLines:
-    - She ask you about the this and that about drinks, she had a feeling you might
-      know
+    - Dia menanyakan ini dan itu tentang minuman, dia merasa mungkin kamu tahu
     rejectLines:
-    - The things you know about the bar industry doesn't really entertain her
+    - Hal-hal yang kamu ketahui tentang industri bar tidak terlalu menghiburnya
   - approach: 2
     likeLines:
-    - She hands you her mixer and challenge you to do some tricks
+    - Dia menyerahkan mixer miliknya kepadamu dan menantangmu untuk melakukan beberapa
+      trik
     rejectLines:
-    - Her face doesn't show appreciation to the party tricks done by other patrons
+    - Wajahnya tidak menunjukkan rasa kagum terhadap atraksi-atraksi yang ditampilkan
+      oleh pengunjung lain
   - approach: 3
     likeLines:
-    - She's hard at work and ask you to wait a while
+    - Dia sedang sibuk bekerja dan meminta Anda untuk menunggu sebentar
     rejectLines:
-    - The bar being very quiet made her very weirded out
+    - Suasana bar yang sangat sepi membuatnya merasa sangat aneh
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - Mata elang mu sangat di apresiasi di pekerjaan ini~
+    - Superb, right?
     likeLines:
-    - Kau bisa bertahan di tempat seketat ini dengan mata jeli itu? Tidak buruk.
+    - Thanks for noticing, that took alot of tries
     neutralLines:
-    - Kau jeli, tapi hati-hati, mengamat seperti itu tinggi resiko
+    - Careful with those eyes, would bring more trouble over praises
     rejectLines:
-    - Tatapan menyelidik seperti itu bisa membuat para tamu risi, kawan. Jaga matamu
+    - Mind your own business alright?
   - approach: 1
     veryLikeLines:
-    - Pelanggan dengan kepala yang terisi? aku suka itu.
+    - You're the first sensible person i've met this night!
     likeLines:
-    - "Cukup berbobot. Menarik, menarik juga jalan pikirmu.\u201D"
+    - Interesting.. teach me more
     neutralLines:
-    - oleh juga teorinya. Lanjut kalau ada intinya.
+    - Is that so?
     rejectLines:
-    - ...Hah? Istilah apa lagi itu? Sudahlah, tidak penting.
+    - Pardon? what is that? could you explain it more like a... human?
   - approach: 2
     veryLikeLines:
-    - Aksi dibanding suara, aku hormat padai orang seperti kamu!
+    - Wah, tidak sangka  ada orang yang benar-benar kompeten di sini!
     likeLines:
-    - "\u201CHooo, aku suka tipe orang cekatan sepertimu. Gerakan bagus!"
+    - Kerja bagus, kita butuh lebih banyak orang seperti kamu
     neutralLines:
-    - Gerakan yang lumayan. Masih bisa lebih rapi lagi.
+    - Cukup bagus. Lain kali, lebih hati-hati lagi.
     rejectLines:
-    - cukup bagus... tapi akan jauh lebih bagus kalau dipikirkan dulu waktunya.
+    - Jangan pernah lakukan itu lagi... oke~
   - approach: 3
     veryLikeLines:
-    - Kamu sedang berbuat baik padaku hanya dengan diam~
+    - Terima kasih telah memahami situasi ini dengan baik
     likeLines:
-    - Baguslah, setidaknya kau tahu kapan harus diam dan membiarkan orang bekerja.
+    - Kamu tahu kapan harus bicara dan kapan tidak. Bagus.
     neutralLines:
-    - Diam saja? yasudah
+    - Bukan orang yang pandai bicara? Ya, kurasa aku tidak masalah dengan itu.
     rejectLines:
-    - Tidak usah pasang muka kaku begitu. Kau bebas bersuara di bar ini, santai saja.
+    - Ayo, katakan sesuatu! Kamu kan tidak ke tempat-tempat seperti ini cuma buat
+      diam saja
