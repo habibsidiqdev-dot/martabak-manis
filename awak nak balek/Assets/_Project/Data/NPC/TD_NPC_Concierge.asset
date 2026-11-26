@@ -35,88 +35,79 @@ MonoBehaviour:
   lockedDialogue: Ingin pergi cepat-cepat saudaraku? tunggu lah sejenak
   rewardItems:
   - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}
-  introDescription: 'Dengan teliti, ia menyelaraskan pulpen perak agar sejajar dengan
-    Buku Tamu bersampul kulit, sambil merapikan sepotong kecil lavender kering di
-    kerah jasnya. Ia melirik ke atas dari balik kacamata setengah bulan dengan senyum
-    teatrikal yang hangat namun terukur. '
-  introDialogue: "\u201CAh, saudaraku, ingin mencari udara segar? Malam masih sangat
-    muda! Keluar tanpa alasan yang jelas adalah tindakan yang vulgar, dan kita jelas
-    bukan orang-orang vulgar, bukan?\u201D \t"
-  winDialogue: "\u201CSempurna. Semuanya tertata rapi sesuai protokol. Sampaikan
-    salam hangatku kepada pihak studio, dan pastikan kau mengenakan pakaian yang
-    cukup hangat di luar. Selamat jalan, sahabatku.\u201D "
-  loseDialogue: "\u201CCk, ck, ck... Sungguh disayangkan. Kembalilah menikmati pesta
-    di dalam, dan cobalah merenungkan bagaimana orang-orang yang beradab seharusnya
-    bersikap.\u201D "
-  noClueText: Senyuman hangat dibawah kumis yang menawan itu membuat ekpresi nya
-    susah ditebak
+  introDescription: Di tengah-tengah area lobi yang tenang, berdiri seorang pria
+    yang rapi di balik sudut yang rapi, di depan deretan mantel yang tertata rapi.
+    Dia adalah concierge senior yang siap melayani.
+  introDialogue: Ah, temanku, apa yang membawamu ke lobi padahal malam masih panjang?
+  winDialogue: Selamat jalan pulang, teman. Ini mantelmu, pergi dan sinari dunia
+    dengan ambisi mu!
+  loseDialogue: Sungguh disayangkan. Tidak perlu terburu-buru, sahabat ku, silakan
+    nikmati pestanya sebentar lagi.
+  noClueText: Kamu terlalu terpaku pada caranya membereskan segala sesuatunya, sampai-sampai
+    kamu lupa bahwa ada gerak gerik yang harus dibaca
   hints:
   - approach: 0
     likeLines:
-    - He's tidying his luxurious little collection, waiting for you to make a comment
-      onit
+    - Dia sedang merapikan koleksi kecilnya yang mewah, sambil menunggu kamu memberikan
+      komentar tentang koleksi itu
     rejectLines:
-    - He puts away his favorite pen, he knows it is a conversation starter and would
-      rather not for you to notice it
+    - Dia menyimpan pulpen kesayangannya, dia tahu pulpen itu bisa jadi pembuka percakapan
+      dan lebih memilih agar kamu tidak menyadarinya
   - approach: 1
     likeLines:
-    - He asked for your opinion of the current socioeconomic conditions around here
+    - Dia menanyakan pendapatmu mengenai kondisi sosial ekonomi saat ini di sekitar
+      sini
     rejectLines:
-    - He irritates at you about experiences with the "knowhow" people
+    - "Dia terus-menerus mengomelimu soal pengalamannya dengan orang-orang yang \u201Cahli\u201D"
   - approach: 2
     likeLines:
-    - Since you have nothing better to do, he ask you to help him tidy up the coat
-      rack
+    - Karena kamu tidak punya hal lain yang lebih penting untuk dilakukan, dia meminta
+      kamu membantunya merapikan rak mantel
     rejectLines:
-    - He strictly told you to NOT touch the coats
+    - Dia dengan tegas melarangmu untuk menyentuh mantel-mantel itu
   - approach: 3
     likeLines:
-    - He is busy on phonecalls with important people, and did not let you to ask
-      anything
+    - Dia sedang sibuk menelepon orang-orang penting, dan tidak mengizinkanmu untuk
+      bertanya apa pun
     rejectLines:
-    - He tapped his fingers on the table, waiting for any noise
+    - Dia mengetuk-ngetukkan jari-jarinya di atas meja, menunggu suara apa pun
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - "Astaga, kau memperhatikan ukiran tersembunyi di bingkai kaca itu?! Kejelianmu
-      sungguh menakjubkan, saudaraku\u2014seperti melihat mahakarya dengan mata telanjang!"
+    - Kamu lihat itu? Ornamen kecil itu? hebat!
     likeLines:
-    - Bahkan aku sendiri hampir lupa detail itu. kau memiliki penglihatan yang sangat
-      tajam!
+    - Bahkan aku pun sudah lupa soal detail itu!
     neutralLines:
-    - Pengamatan yang cukup masuk akal. Menarik, meski belum sepenuhnya mengesankan.
+    - Hal ini memang cukup jelas, tapi mata yang tajam
     rejectLines:
-    - ...Benarkah begitu? Ah, baguslah jika kau merasa demikian.
+    - Kamu seharusnya tidak berada di sini kalau hanya sekadar melihat-lihat
   - approach: 1
     veryLikeLines:
-    - Sungguh langka menemukan seseorang yang menguasai rincian sejarah sepresisi
-      ini! Kita jelas berasal dari lingkaran yang paham tata krama!
+    - Sekarang aku mengerti mengapa kamu diterima di pesta ini, kecerdasanmu membuktikannya!
     likeLines:
-    - "Wawasan pustaka di dalam dirimu ternyata cukup luas juga, Perpustakaan di
-      dirimu cukup luas juga, saudaraku.\r."
+    - Perpustakaan dalam pikiran mu sangat impresif!
     neutralLines:
-    - Informasi yang cukup lumayan. Sayangnya, sekadar tahu tidak selalu cukup untuk
-      membuka pintu.
+    - Cukup bagus, tapi aku tidak  begitu tahu apakah itu masih relevan sekarang
     rejectLines:
-    - Tidak semuanya di dunia ini harus terdengar... autentik, bukan?
+    - Hmm... sepertinya aku tahu soal itu, dan menurutku kamu tidak mengatakannya
+      dengan benar
   - approach: 2
     veryLikeLines:
-    - Oh, keberanian yang terukur! Jarang sekali ada yang bertindak segesit itu tanpa
-      merusak keanggunan ruangan!
+    - Aku tak pernah menyangka bahwa suatu hari aku akan melihat seseorang yang bisa
+      bersikap begitu berani... namun tetap anggun!
     likeLines:
-    - Seseorang yang penuh inisiatif dan aksi, ya? Menarik, sangat menarik.
+    - Kamu memang orang yang menarik
     neutralLines:
-    - Cukup sigap, kurasa. Tapi ingat, ini bukan arena pertandingan.
+    - Refleksnya bagus, tapi coba bertindak dengan hati-hati
     rejectLines:
-    - Sangat vulgar, saudaraku. Bisakah gerakan itu sedikit diredam?
+    - Terlalu gegabah, pertimbangkan kembali langkah-langkahmu dengan cermat
   - approach: 3
     veryLikeLines:
-    - "\u201CAh... keheningan yang begitu berkelas. Tidak perlu banyak kata saat
-      dua pikiran saling memahami."
+    - Terima kasih sudah memberi ku waktu untuk berkonsentrasi
     likeLines:
-    - Keheningan di sela-sela percakapan terkadang adalah hal terbaik.
+    - 'Ada saat-saatnya kita perlu diam, dan bagus  kamu tahu kapan waktunya '
     neutralLines:
-    - Hening, ya. Baiklah, kuanggap kau sedang menyusun kata-kata.
+    - pakai waktu mu sebanyaknya  untuk memperkaya kosakata
     rejectLines:
-    - Ahem, ini bukan ruang surat-menyurat rahasia, saudaraku. Jangan sungkan untuk
-      berbicara.
+    - Tempat ini sangat cocok untuk menikmati keheningan, tapi kau sedang berbicara
+      denganku bukan?
