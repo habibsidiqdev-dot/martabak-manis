@@ -16,6 +16,10 @@ using UnityEngine.UI;
 ///   2. Pasang komponen Door di gerbang akhir, isi Required Items dengan Item_KunciGerbang.
 ///   3. Di Door > On Opened, tambahkan objek "Ending" lalu pilih EndingScreen > Show.
 ///
+/// Mau desain sendiri? Buat panel ending di Canvas-mu (nonaktif di awal), seret ke 'Custom Screen',
+/// dan (opsional) seret tombolnya ke Restart Button / Quit Button. Judul/pesan ditulis langsung di panelmu;
+/// field Title/Message dan warna di bawah hanya dipakai UI otomatis.
+///
 /// Show() langsung mengunci input pemain; layar baru muncul setelah 'delay' (supaya gerbang sempat terlihat terbuka).
 /// Aman dipanggil berkali-kali: hanya yang pertama yang jalan.
 /// </summary>
@@ -40,6 +44,16 @@ public class EndingScreen : MonoBehaviour
     [SerializeField] private Color buttonColor = new Color(.10f, .10f, .12f, .90f);
     [SerializeField] private Color buttonHoverColor = new Color(.45f, .32f, .10f, .95f);
     [SerializeField] private Color buttonPressedColor = new Color(.95f, .72f, .25f, 1f);
+
+    [Header("Desain sendiri (opsional)")]
+    [Tooltip("Panel ending buatanmu: objek di dalam sebuah Canvas, biarkan NONAKTIF di awal. " +
+             "Kosong = pakai UI otomatis dari script. Canvas-nya harus punya GraphicRaycaster dan Sort Order lebih besar dari 10 " +
+             "(UI encounter), mis. 100.")]
+    [SerializeField] private GameObject customScreen;
+    [Tooltip("Opsional. Tombol di panelmu yang memuat ulang scene.")]
+    [SerializeField] private Button restartButton;
+    [Tooltip("Opsional. Tombol di panelmu yang menutup game.")]
+    [SerializeField] private Button quitButton;
 
     private bool _shown;
     private CanvasGroup _group;
@@ -79,7 +93,8 @@ public class EndingScreen : MonoBehaviour
             Cursor.visible = true;
         }
 
-        Build();
+        if (customScreen != null) UseCustomScreen();
+        else Build();
 
         _group.alpha = 0f;
         float elapsed = 0f;
@@ -120,7 +135,24 @@ public class EndingScreen : MonoBehaviour
 #endif
     }
 
-    // ---------- Membangun UI ----------
+    // ---------- Panel buatan sendiri ----------
+
+    private void UseCustomScreen()
+    {
+        if (!customScreen.TryGetComponent(out _group))
+            _group = customScreen.AddComponent<CanvasGroup>();   // untuk fade; tidak mengubah desainmu
+
+        _group.alpha = 0f;
+        customScreen.SetActive(true);
+
+        if (restartButton != null) restartButton.onClick.AddListener(Restart);
+        if (quitButton != null) quitButton.onClick.AddListener(Quit);
+
+        if (FindFirstObjectByType<EventSystem>() == null)
+            Debug.LogWarning("Scene tidak punya EventSystem: tombol layar ending tidak akan bisa diklik.", this);
+    }
+
+    // ---------- Membangun UI otomatis ----------
 
     private void Build()
     {
