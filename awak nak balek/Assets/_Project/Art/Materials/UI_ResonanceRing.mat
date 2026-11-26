@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI_ResonanceRing
+  m_Shader: {fileID: 4800000, guid: fb1ce5523e0735840b3a8dbd6ce9327c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AuraSize: 0.154
+    - _AuraStrength: 0.56
+    - _ColorMask: 15
+    - _DividerOverhang: 0.05
+    - _DividerWidth: 0.011
+    - _Fill: 1
+    - _FlowSpeed: 0.2
+    - _InnerRadius: 0.5
+    - _NoiseScale: 5.2
+    - _OuterRadius: 0.78
+    - _Pulse: 0.7
+    - _Segments: 5
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _TipGlow: 1.5
+    - _UseUIAlphaClip: 0
+    - _Wobble: 0.04
+    m_Colors:
+    - _AuraColor: {r: 0.85660374, g: 0.49989405, b: 0.024243355, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _CoreColor: {r: 0.04, g: 0.04, b: 0.059999965, a: 0.55}
+    - _DividerColor: {r: 0.7509433, g: 0.7509433, b: 0.7509433, a: 0.8}
+    - _FillColor: {r: 1, g: 1, b: 1, a: 0.72156864}
+    - _TrackColor: {r: 0, g: 0, b: 0, a: 0.1}
+    - _TrackRimColor: {r: 1, g: 1, b: 1, a: 0.22}
+    - _WispColor: {r: 0.8509804, g: 0.65177137, b: 0.3215686, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

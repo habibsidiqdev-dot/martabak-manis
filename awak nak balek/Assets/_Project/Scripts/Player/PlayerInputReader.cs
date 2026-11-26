@@ -10,6 +10,9 @@ public class PlayerInputReader : MonoBehaviour
 {
     public event Action OnInteractEvent;
 
+    /// <summary>Dipanggil saat GameplayEnabled BERUBAH (true = gameplay jalan, false = dialog/encounter/ending). Dipakai InventoryHudView.</summary>
+    public event Action<bool> GameplayEnabledChanged;
+
     /// <summary>False saat dialog/encounter: gerak, look, dan interact dikunci, kursor bebas.</summary>
     public bool GameplayEnabled { get; private set; } = true;
 
@@ -59,8 +62,10 @@ public class PlayerInputReader : MonoBehaviour
     /// </param>
     public void SetGameplayEnabled(bool isEnabled, bool updateCursor = true)
     {
+        bool changed = GameplayEnabled != isEnabled;
         GameplayEnabled = isEnabled;
         if (updateCursor) SetCursorFree(!isEnabled);
+        if (changed) GameplayEnabledChanged?.Invoke(isEnabled);
     }
 
     /// <summary>true = kursor bebas dan terlihat (UI), false = terkunci di tengah dan tersembunyi (gameplay).</summary>

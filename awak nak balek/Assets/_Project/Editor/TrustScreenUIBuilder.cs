@@ -36,6 +36,10 @@ namespace TrustSystem.EditorTools
         // Tampak luar roda = tombol di posisi +-300 (lebar 260) dan +-210 (tinggi 72), jadi ~860 x ~492.
         private static readonly Vector2 WheelSize = new Vector2(880f, 500f);
 
+        // Bar Resonansi bulat: Image persegi (cincin + ruang untuk aura). Radius cincin diatur di material ResonanceRing.
+        private const float RingImageSize = 400f;
+        private const string RingMaterialPath = "Assets/_Project/Art/Materials/M_ResonanceRing.mat";
+
         private const float PanelSideMargin = 40f;      // jarak panel ke tepi kiri/kanan
         private const float DialogueHeight = 200f;      // tinggi DialogueBox
         private const float DialogueBottom = 40f;       // jarak DialogueBox ke tepi bawah
@@ -97,10 +101,12 @@ namespace TrustSystem.EditorTools
             RectTransform wheel = NewRect("Wheel", wheelGroup);
             AddLayoutElement(wheel, minHeight: WheelSize.y, preferredWidth: WheelSize.x, preferredHeight: WheelSize.y);
 
-            RectTransform disc = NewRect("CenterDisc", wheel);
-            Place(disc, new Vector2(.5f, .5f), Vector2.zero, new Vector2(300f, 300f));
-            Image discImage = AddImage(disc, PanelColor, false);
-            discImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+            // Bar Resonansi bulat (shader UI/ResonanceRing). Source Image sengaja KOSONG.
+            RectTransform ringRect = NewRect("ResonanceRing", wheel);
+            Place(ringRect, new Vector2(.5f, .5f), Vector2.zero, new Vector2(RingImageSize, RingImageSize));
+            Image ringImage = AddImage(ringRect, Color.white, false);
+            ringImage.material = GetOrCreateRingMaterial();
+            ResonanceRing ring = ringRect.gameObject.AddComponent<ResonanceRing>();
 
             TextMeshProUGUI caption = AddText("ResonanceCaption", wheel, "Resonansi", 28f, TextAlignmentOptions.Center, MutedColor, FontStyles.Normal);
             Place(caption.rectTransform, new Vector2(.5f, .5f), new Vector2(0f, 72f), new Vector2(260f, 40f));
@@ -179,6 +185,7 @@ namespace TrustSystem.EditorTools
             SetRef(so, "dialogueLabel", dialogueLabel);
             SetRef(so, "resonanceLabel", resonanceLabel);
             SetRef(so, "turnsLabel", turnsLabel);
+            SetRef(so, "resonanceRing", ring);
             SetRef(so, "resultPanel", resultPanel.gameObject);
             SetRef(so, "resultLabel", resultLabel);
             SetRef(so, "retryButton", retryButton);
@@ -227,6 +234,24 @@ namespace TrustSystem.EditorTools
         }
 
         // ---------- Helper ----------
+
+        private static Material GetOrCreateRingMaterial()
+        {
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(RingMaterialPath);
+            if (material != null) return material;
+
+            Shader shader = Shader.Find("UI/ResonanceRing");
+            if (shader == null)
+            {
+                Debug.LogError("Shader 'UI/ResonanceRing' tidak ditemukan. Pastikan ResonanceRing.shader ada di project.");
+                return null;
+            }
+
+            material = new Material(shader);
+            AssetDatabase.CreateAsset(material, RingMaterialPath);
+            AssetDatabase.SaveAssets();
+            return material;
+        }
 
         private static void SetRef(SerializedObject so, string field, Object value)
         {

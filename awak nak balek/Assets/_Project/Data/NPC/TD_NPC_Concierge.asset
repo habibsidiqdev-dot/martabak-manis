@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: TD_NPC_Concierge
   m_EditorClassIdentifier: 
   npcName: Concierge (Sebastian)
-  maxTurns: 4
+  maxTurns: 5
   targetResonance: 9
-  clueChance: 1
+  clueChance: 0.2
   moodPool:
   - mood: 0
     min: 3

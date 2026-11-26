@@ -15,7 +15,7 @@ MonoBehaviour:
   npcName: Cleaning (Dean)
   maxTurns: 6
   targetResonance: 5
-  clueChance: 0.15
+  clueChance: 0.85
   moodPool:
   - mood: 0
     min: 3

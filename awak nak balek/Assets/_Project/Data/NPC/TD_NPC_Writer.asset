@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
   m_Name: TD_NPC_Writer
   m_EditorClassIdentifier: 
-  npcName: Writer (...)
+  npcName: Writer (Diego)
   maxTurns: 5
   targetResonance: 7
-  clueChance: 0.55
+  clueChance: 0.45
   moodPool:
   - mood: 0
     min: 3

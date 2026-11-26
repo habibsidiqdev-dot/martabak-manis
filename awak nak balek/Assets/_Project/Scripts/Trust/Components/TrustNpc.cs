@@ -209,7 +209,7 @@ namespace TrustSystem
 
         // Narasi (deskripsi pembuka) tampil miring & sedikit redup di atas dialogue NPC, dipisah satu baris kosong.
         // Supaya jalan, gaya dasar DialogueLabel harus Normal. Trim() membuang sisa \r / spasi dari data.
-        private const string NarrationColor = "#C7BDAD";
+        private const string NarrationColor = "#59544d";
 
         private string ComposeIntro()
         {

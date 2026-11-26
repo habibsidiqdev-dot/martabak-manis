@@ -42,9 +42,11 @@ namespace TrustSystem
         [SerializeField] private TMP_Text npcNameLabel;
         [SerializeField] private TMP_Text hintLabel;
         [SerializeField] private TMP_Text dialogueLabel;
-        [Tooltip("Tengah roda: tampil sebagai \"3 / 10\". Tulisan \"Resonansi\" dibuat terpisah (statis).")]
         [SerializeField] private TMP_Text resonanceLabel;
+        [Tooltip("Opsional: teks angka Resonansi (mis. 3 / 10). Boleh kosong jika progres hanya ditampilkan lewat ring.")]
         [SerializeField] private TMP_Text turnsLabel;
+        [Tooltip("Bar Resonansi bulat. Isi dengan komponen ResonanceRing pada Image ring.")]
+        [SerializeField] private ResonanceRing resonanceRing;
 
         [Header("Dialogue (deskripsi pembuka + dialogue bisa panjang)")]
         [Tooltip("Aktif = font dialogue mengecil otomatis (antara Min dan Max) supaya teks panjang muat di kotak.")]
@@ -96,6 +98,7 @@ namespace TrustSystem
 
             if (encounterRoot == null || panelRoot == null || npcNameLabel == null || hintLabel == null ||
                 dialogueLabel == null || resonanceLabel == null || turnsLabel == null ||
+                dialogueLabel == null || turnsLabel == null ||
                 resultPanel == null || resultLabel == null || retryButton == null || closeButton == null ||
                 approachButtons == null || approachButtons.Length != TrustExtensions.ApproachCount)
                 return false;
@@ -147,6 +150,7 @@ namespace TrustSystem
             if (viewer == null) viewer = Camera.main;
 
             npcNameLabel.text = npcName;
+            if (resonanceRing != null) resonanceRing.SnapNext();   // encounter baru: bar tidak "meluncur" dari nilai NPC sebelumnya
             HideResult();
             encounterRoot.SetActive(true);
             if (crosshairImage != null) crosshairImage.enabled = false;
@@ -191,8 +195,9 @@ namespace TrustSystem
 
         public void SetStatus(int resonance, int target, int turnsLeft)
         {
-            if (resonanceLabel != null) resonanceLabel.text = $"{resonance} / {target}";
-            if (turnsLabel != null) turnsLabel.text = $"Giliran {turnsLeft}";
+            if (resonanceRing != null) resonanceRing.SetResonance(resonance, target);
+            if (resonanceLabel != null) resonanceLabel.text = $"{resonance}";
+            if (turnsLabel != null) turnsLabel.text = $"{turnsLeft}";
         }
 
         /// <summary>Kunci/buka tombol pilihan (mis. saat animasi hasil berjalan).</summary>

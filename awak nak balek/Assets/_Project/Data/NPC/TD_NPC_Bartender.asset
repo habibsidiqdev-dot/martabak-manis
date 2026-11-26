@@ -15,7 +15,7 @@ MonoBehaviour:
   npcName: Bartender (Lara)
   maxTurns: 5
   targetResonance: 6
-  clueChance: 0.35
+  clueChance: 0.65
   moodPool:
   - mood: 0
     min: 3
@@ -74,22 +74,24 @@ MonoBehaviour:
   approachReactions:
   - approach: 0
     veryLikeLines:
-    - Superb, right?
+    - Luar biasa, kan?
     likeLines:
-    - Thanks for noticing, that took alot of tries
+    - Terima kasih sudah menyadarinya, butuh banyak percobaan untuk bisa seperti
+      itu
     neutralLines:
-    - Careful with those eyes, would bring more trouble over praises
+    - Hati-hati dengan tatapan matamu itu, itu justru akan mendatangkan lebih banyak
+      masalah daripada pujian
     rejectLines:
-    - Mind your own business alright?
+    - Urus saja urusanmu sendiri, oke?
   - approach: 1
     veryLikeLines:
-    - You're the first sensible person i've met this night!
+    - Kamu orang pertama yang waras yang kutemui malam ini!
     likeLines:
-    - Interesting.. teach me more
+    - Menarik... ajari aku lebih banyak lagi
     neutralLines:
-    - Is that so?
+    - Benarkah begitu?
     rejectLines:
-    - Pardon? what is that? could you explain it more like a... human?
+    - Maaf? Apa itu? Bisakah kamu menjelaskannya dengan bahasa...manusia?
   - approach: 2
     veryLikeLines:
     - Wah, tidak sangka  ada orang yang benar-benar kompeten di sini!

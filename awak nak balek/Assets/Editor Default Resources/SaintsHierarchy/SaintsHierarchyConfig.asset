@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbc0cfa52b07441a8d31eae53e44ea76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <indentGuides>k__BackingField: 1
+  <disabled>k__BackingField: 0
+  <backgroundStrip>k__BackingField: 0
+  <gameObjectEnabledChecker>k__BackingField: 0
+  <gameObjectEnabledCheckerEveryRow>k__BackingField: 0
+  <componentIcons>k__BackingField: 0
+  <componentIconsForGeneralScripts>k__BackingField: 0
+  <componentIconsForTransform>k__BackingField: 0
+  <enableLayer>k__BackingField: 0
+  <layerWidth>k__BackingField: 70
+  <enableTag>k__BackingField: 0
+  <tagWidth>k__BackingField: 70
+  <noDefaultIcon>k__BackingField: 0
+  <transparentDefaultIcon>k__BackingField: 0
+  <sceneGuidToGoConfigsList>k__BackingField:
+  - sceneGuid: df6000700a6596b42946c50ecb7022b4
+    configs:
+    - globalObjectIdString: GlobalObjectId_V1-1-df6000700a6596b42946c50ecb7022b4-1931993619-0
+      icon: 
+      hasColor: 1
+      color: {r: 0.7132075, g: 0, b: 0, a: 1}
+    - globalObjectIdString: GlobalObjectId_V1-1-df6000700a6596b42946c50ecb7022b4-1409236266-0
+      icon: 
+      hasColor: 1
+      color: {r: 0.4550001, g: 0.25024998, b: 0.65975, a: 1}
+  <disableFavorites>k__BackingField: 0
+  <FavoriteClickToInspect>k__BackingField: 0
+  <saveFavoritesToProjectConfig>k__BackingField: 0
+  <favorites>k__BackingField: []
+  <disableSceneSelector>k__BackingField: 0
+  <disableSceneFindInProject>k__BackingField: 0
+  <ReplaceContextMenu>k__BackingField: 1
+  <DefaultContextMenuIcons>k__BackingField: 1
+  <SaveContextMenuToProjectConfig>k__BackingField: 0
+  <ContextPathOverrides>k__BackingField: []
+  <ContextCustomGroups>k__BackingField: []
