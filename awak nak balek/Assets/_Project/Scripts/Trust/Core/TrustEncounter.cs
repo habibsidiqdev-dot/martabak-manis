@@ -21,6 +21,7 @@ namespace TrustSystem
         public int MaxTurns { get; }
         public int TargetResonance { get; }
         public int TurnsLeft { get; private set; }
+        /// <summary>Minimal 0. Pendekatan yang ditolak hanya mengurangi sampai 0, tidak pernah minus.</summary>
         public int Resonance { get; private set; }
         public EncounterState State { get; private set; } = EncounterState.NotStarted;
 
@@ -70,9 +71,13 @@ namespace TrustSystem
                 throw new InvalidOperationException($"Tidak bisa memilih saat state = {State}.");
 
             MoodRule rule = _ruleByApproach[(int)approach];
-            int delta = _rng.Next(rule.min, rule.max + 1);   // batas atas exclusive, jadi +1
+            int rolled = _rng.Next(rule.min, rule.max + 1);   // batas atas exclusive, jadi +1
 
-            Resonance += delta;
+            // Resonansi tidak pernah minus: ring dan angka di UI selalu sama dan mudah dibaca pemain.
+            // Delta = perubahan yang BENAR-BENAR terjadi (mis. -2 saat resonansi 1 hanya jadi -1).
+            int before = Resonance;
+            Resonance = Math.Max(0, Resonance + rolled);
+            int delta = Resonance - before;
             TurnsLeft--;
 
             if (Resonance >= TargetResonance) State = EncounterState.Won;

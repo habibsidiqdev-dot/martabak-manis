@@ -49,6 +49,7 @@ public class PlayerInteractor : MonoBehaviour
         _subscribed = false;
 
         _messageTimeLeft = 0f;
+        SetOutline(_focused, false);
         _focused = null;
         RefreshPrompt();
     }
@@ -106,8 +107,31 @@ public class PlayerInteractor : MonoBehaviour
     private void SetFocus(IInteractable target)
     {
         if (ReferenceEquals(_focused, target)) return;
+
+        SetOutline(_focused, false);
         _focused = target;
+        SetOutline(_focused, true);
+
         RefreshPrompt();
+    }
+
+    /// <summary>
+    /// Outline kertas di objek yang sedang disorot. InteractableOutline ditambahkan otomatis kalau belum ada,
+    /// jadi semua interactable (pintu, item, NPC) langsung dapat outline tanpa setup per objek.
+    /// </summary>
+    private static void SetOutline(IInteractable target, bool on)
+    {
+        Component component = target as Component;
+        if (component == null) return;   // bukan komponen, atau objeknya sudah dihancurkan
+
+        InteractableOutline outline = component.GetComponent<InteractableOutline>();
+        if (outline == null)
+        {
+            if (!on) return;
+            outline = component.gameObject.AddComponent<InteractableOutline>();
+        }
+
+        outline.SetHighlighted(on);
     }
 
     private void RefreshPrompt()

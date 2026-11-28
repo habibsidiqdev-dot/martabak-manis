@@ -30,23 +30,23 @@ Material:
     m_Ints: []
     m_Floats:
     - _AuraSize: 0.154
-    - _AuraStrength: 0.56
+    - _AuraStrength: 0.4
     - _ColorMask: 15
     - _DividerOverhang: 0.05
     - _DividerWidth: 0.011
     - _Fill: 1
     - _FlowSpeed: 0.2
     - _InnerRadius: 0.5
-    - _NoiseScale: 5.2
+    - _NoiseScale: 8
     - _OuterRadius: 0.78
-    - _Pulse: 0.7
+    - _Pulse: 0
     - _Segments: 5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _TipGlow: 1.5
+    - _TipGlow: 1.72
     - _UseUIAlphaClip: 0
     - _Wobble: 0.04
     m_Colors:
@@ -54,7 +54,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CoreColor: {r: 0.04, g: 0.04, b: 0.059999965, a: 0.55}
     - _DividerColor: {r: 0.7509433, g: 0.7509433, b: 0.7509433, a: 0.8}
-    - _FillColor: {r: 1, g: 1, b: 1, a: 0.72156864}
+    - _FillColor: {r: 1, g: 1, b: 1, a: 0.7058824}
     - _TrackColor: {r: 0, g: 0, b: 0, a: 0.1}
     - _TrackRimColor: {r: 1, g: 1, b: 1, a: 0.22}
     - _WispColor: {r: 0.8509804, g: 0.65177137, b: 0.3215686, a: 1}

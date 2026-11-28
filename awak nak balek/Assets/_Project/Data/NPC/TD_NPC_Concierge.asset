@@ -30,8 +30,8 @@ MonoBehaviour:
     min: -2
     max: -2
   requiredItems:
-  - {fileID: 11400000, guid: 3db96a1ce1ca72f47a5d9f8d6ef1b6ca, type: 2}
   - {fileID: 11400000, guid: 33f817e052510894f9c16dae128740fc, type: 2}
+  - {fileID: 11400000, guid: 3db96a1ce1ca72f47a5d9f8d6ef1b6ca, type: 2}
   lockedDialogue: Ingin pergi cepat-cepat saudaraku? tunggu lah sejenak
   rewardItems:
   - {fileID: 11400000, guid: a9bcbc310f90cc64885ae6a6f822eea9, type: 2}

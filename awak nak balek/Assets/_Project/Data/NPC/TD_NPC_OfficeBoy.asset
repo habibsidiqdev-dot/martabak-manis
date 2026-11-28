@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TD_NPC_OfficeBoy
   m_EditorClassIdentifier: 
   npcName: Cleaning (Dean)
-  maxTurns: 6
+  maxTurns: 5
   targetResonance: 5
   clueChance: 0.85
   moodPool:

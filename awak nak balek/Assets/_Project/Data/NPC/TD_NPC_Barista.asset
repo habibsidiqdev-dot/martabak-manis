@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b32718a15d73894478b662a8803d4725, type: 3}
-  m_Name: TD_NPC_Bartender
+  m_Name: TD_NPC_Barista
   m_EditorClassIdentifier: 
-  npcName: Bartender (Lara)
+  npcName: Barista (Lara)
   maxTurns: 5
   targetResonance: 6
   clueChance: 0.65

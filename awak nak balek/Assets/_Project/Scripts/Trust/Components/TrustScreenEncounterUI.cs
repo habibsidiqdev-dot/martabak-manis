@@ -42,8 +42,6 @@ namespace TrustSystem
         [SerializeField] private TMP_Text npcNameLabel;
         [SerializeField] private TMP_Text hintLabel;
         [SerializeField] private TMP_Text dialogueLabel;
-        [SerializeField] private TMP_Text resonanceLabel;
-        [Tooltip("Opsional: teks angka Resonansi (mis. 3 / 10). Boleh kosong jika progres hanya ditampilkan lewat ring.")]
         [SerializeField] private TMP_Text turnsLabel;
         [Tooltip("Bar Resonansi bulat. Isi dengan komponen ResonanceRing pada Image ring.")]
         [SerializeField] private ResonanceRing resonanceRing;
@@ -97,7 +95,6 @@ namespace TrustSystem
             if (_ready) return true;
 
             if (encounterRoot == null || panelRoot == null || npcNameLabel == null || hintLabel == null ||
-                dialogueLabel == null || resonanceLabel == null || turnsLabel == null ||
                 dialogueLabel == null || turnsLabel == null ||
                 resultPanel == null || resultLabel == null || retryButton == null || closeButton == null ||
                 approachButtons == null || approachButtons.Length != TrustExtensions.ApproachCount)
@@ -196,7 +193,6 @@ namespace TrustSystem
         public void SetStatus(int resonance, int target, int turnsLeft)
         {
             if (resonanceRing != null) resonanceRing.SetResonance(resonance, target);
-            if (resonanceLabel != null) resonanceLabel.text = $"{resonance}";
             if (turnsLabel != null) turnsLabel.text = $"{turnsLeft}";
         }
 

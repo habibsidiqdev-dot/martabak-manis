@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
+using SusSystem;
 
 namespace TrustSystem
 {
@@ -279,7 +280,7 @@ namespace TrustSystem
 
                 case EncounterState.Lost:
                     _view.SetDialogue(data.LoseDialogue);
-                    _view.ShowResult(false, $"{data.NpcName} belum percaya. Resonansi {_encounter.Resonance} / {_encounter.TargetResonance}.");
+                    HandleLost();
                     break;
 
                 default:
@@ -288,6 +289,25 @@ namespace TrustSystem
             }
 
             _resolving = false;
+        }
+
+        // Kalah = sus global naik 1 (permanen). Kalau bar jadi penuh (mis. 4/4), SusManager memanggil On Maxed
+        // (game over) dan panel hasil TIDAK ditampilkan, supaya tombol "Coba lagi" tidak muncul.
+        private void HandleLost()
+        {
+            string message = $"{data.NpcName} belum percaya. Resonansi {_encounter.Resonance} / {_encounter.TargetResonance}.";
+
+            SusManager sus = SusManager.Instance;
+            if (sus == null)
+            {
+                _view.ShowResult(false, message);   // tidak ada SusManager di scene: perilaku lama
+                return;
+            }
+
+            sus.Add(1);
+            if (sus.IsMaxed) return;
+
+            _view.ShowResult(false, $"{message}\nKecurigaan naik ({sus.Current}/{sus.Max}).");
         }
 
         // ---------- Retry / tutup ----------
