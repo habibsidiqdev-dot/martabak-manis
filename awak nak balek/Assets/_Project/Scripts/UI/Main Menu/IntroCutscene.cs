@@ -101,6 +101,14 @@ public class IntroCutscene : MonoBehaviour
         new CutsceneLine { text = "Sebaiknya aku cari alasan bagus untuk pulang." },
     };
 
+    [Header("Lewati dialog")]
+    [Tooltip("Centang: tekan E saat satu baris dialog tampil untuk langsung lanjut ke baris berikutnya. " +
+             "Voice over baris itu dipotong. Napas, pintu, dan jalan keluar tidak ikut dilewati.")]
+    [SerializeField] private bool allowSkip = true;
+    [Tooltip("Opsional: objek petunjuk (mis. teks \"[E] Lewati\") yang tampil selama kotak dialog terlihat. " +
+             "Kosong = tanpa petunjuk.")]
+    [SerializeField] private GameObject skipHint;
+
     [Header("Pintu")]
     [SerializeField] private Door door;
     [Tooltip("Jeda setelah Door.Open() sebelum MC mulai jalan. Samakan dengan 'Open Duration' di Door.")]
@@ -139,6 +147,8 @@ public class IntroCutscene : MonoBehaviour
     private float _pulsePhase;         // fase denyut napas, dikumpulkan dengan cara yang sama
     private PlayerLook _look;
     private Coroutine _lookRoutine;
+    private bool _lineActive;          // sebuah baris dialog sedang tampil (E hanya berlaku saat ini)
+    private bool _skipRequested;       // E ditekan: baris yang sedang tampil harus diakhiri
 
     public bool IsRunning => _running;
 
@@ -151,6 +161,17 @@ public class IntroCutscene : MonoBehaviour
             _subtitleGroup.alpha = 0f;
             subtitleRoot.SetActive(false);
         }
+
+        if (skipHint != null) skipHint.SetActive(false);
+    }
+
+    // Tombol dibaca langsung (seperti DialogueScreenUI) karena input gameplay dikunci selama cutscene.
+    private void Update()
+    {
+        if (!allowSkip || !_lineActive) return;
+
+        UnityEngine.InputSystem.Keyboard keyboard = UnityEngine.InputSystem.Keyboard.current;
+        if (keyboard != null && keyboard.eKey.wasPressedThisFrame) _skipRequested = true;
     }
 
     /// <summary>Mulai cutscene. onDone dipanggil sekali saat gameplay sudah dibuka lagi.</summary>
@@ -248,6 +269,9 @@ public class IntroCutscene : MonoBehaviour
         // Kotak muncul (fade in) hanya kalau belum terlihat, jadi cuma di baris pertama.
         yield return ShowSubtitleBox();
 
+        _skipRequested = false;   // E yang ditekan sebelum baris ini tampil tidak dihitung
+        _lineActive = true;
+
         // Siapkan teks tapi belum ada huruf yang terlihat.
         int totalChars = line.text.Length;
         if (subtitleLabel != null)
@@ -278,7 +302,7 @@ public class IntroCutscene : MonoBehaviour
         // Typewriter
         if (subtitleLabel != null && typeDuration > 0f)
         {
-            for (float t = 0f; t < typeDuration; t += Time.deltaTime)
+            for (float t = 0f; t < typeDuration && !_skipRequested; t += Time.deltaTime)
             {
                 subtitleLabel.maxVisibleCharacters = Mathf.CeilToInt(totalChars * (t / typeDuration));
                 yield return null;
@@ -288,10 +312,23 @@ public class IntroCutscene : MonoBehaviour
 
         // Tahan sisa durasi baris (kalau mengetik lebih cepat dari durasi minimum)
         float hold = lineDuration - typeDuration;
-        if (hold > 0f) yield return new WaitForSeconds(hold);
+        if (hold > 0f) yield return WaitOrSkip(hold);
 
         // pauseAfter: teks yang sudah lengkap tetap terlihat, baru baris berikutnya menggantikannya.
-        if (line.pauseAfter > 0f) yield return new WaitForSeconds(line.pauseAfter);
+        if (line.pauseAfter > 0f) yield return WaitOrSkip(line.pauseAfter);
+
+        // Baris dilewati lewat E: potong voice over-nya (baris berikutnya memang memulai klip baru).
+        if (_skipRequested && voiceSource != null) voiceSource.Stop();
+
+        _lineActive = false;
+        _skipRequested = false;
+    }
+
+    // Menunggu 'seconds' detik, atau berhenti lebih awal kalau E ditekan.
+    private IEnumerator WaitOrSkip(float seconds)
+    {
+        for (float t = 0f; t < seconds && !_skipRequested; t += Time.deltaTime)
+            yield return null;
     }
 
     private IEnumerator ShowSubtitleBox()
@@ -302,6 +339,7 @@ public class IntroCutscene : MonoBehaviour
         if (subtitleLabel != null) subtitleLabel.text = "";
         if (_subtitleGroup != null) _subtitleGroup.alpha = 0f;
         subtitleRoot.SetActive(true);
+        if (allowSkip && skipHint != null) skipHint.SetActive(true);
         yield return FadeSubtitle(0f, 1f);
     }
 
@@ -309,6 +347,7 @@ public class IntroCutscene : MonoBehaviour
     {
         if (!_subtitleVisible || subtitleRoot == null) yield break;
 
+        if (skipHint != null) skipHint.SetActive(false);
         yield return FadeSubtitle(1f, 0f);
         subtitleRoot.SetActive(false);
         _subtitleVisible = false;
@@ -583,6 +622,9 @@ public class IntroCutscene : MonoBehaviour
 
         if (subtitleRoot != null) subtitleRoot.SetActive(false);
         if (_subtitleGroup != null) _subtitleGroup.alpha = 0f;
+        if (skipHint != null) skipHint.SetActive(false);
         _subtitleVisible = false;
+        _lineActive = false;
+        _skipRequested = false;
     }
 }
